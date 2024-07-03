@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# build Autoware
+cd /aichallenge
+./build_autoware.bash
+
+# build autoware-practice
 cd /autoware-practice
 vcs import src < autoware.repos
 rosdep update
