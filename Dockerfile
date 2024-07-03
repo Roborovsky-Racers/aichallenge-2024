@@ -8,6 +8,14 @@ RUN apt-get -y install wmctrl
 RUN apt-get -y install ros-humble-rqt-tf-tree
 RUN apt-get -y install ros-humble-rqt-graph
 
+# custom
+RUN apt-get -y install vim
+RUN apt-get -y install tmux
+RUN sudo apt update
+RUN sudo apt install -y python3-rosdep
+RUN sudo apt install -y python3-vcstool
+RUN sudo apt install -y python3-colcon-common-extensions
+
 # PATH="$PATH:/root/.local/bin"
 # PATH="/usr/local/cuda/bin:$PATH"
 ENV XDG_RUNTIME_DIR /tmp/xdg
