@@ -1,0 +1,14 @@
+ARG BASE_IMAGE
+FROM ${BASE_IMAGE}
+
+ARG USERNAME
+ARG UID
+ARG GID
+
+RUN groupadd -g "${GID}" "${USERNAME}" || true; \
+    useradd -u "${UID}" -g "${GID}" --create-home --home-dir "/home/${USERNAME}" --shell /bin/bash --groups adm,sudo "${USERNAME}"; \
+    echo "${USERNAME}:${USERNAME}" | chpasswd; \
+    echo "${USERNAME} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+
+USER ${USERNAME}
+WORKDIR /aichallenge
