@@ -78,6 +78,7 @@ alias ccd='colcon_cd'
 
 # alias definitions
 alias rdi="rosdep install --from-paths src --ignore-src -r -y"
+alias rkill="ps -ef | grep -e /opt/ros/\${ROS_DISTRO} -e /aichallenge -e /autoware | grep -v grep | awk '{cmd = \"\"; for(i=8;i<=NF;i++) cmd = cmd \$i \" \"; print \$2, cmd}' | while read pid cmd; do echo \"kill process: PID \$pid Command: \$cmd\"; kill -9 \$pid; done"
 
 # Register completion for colcon
 _colcon_package_complete() {
