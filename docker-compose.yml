@@ -27,15 +27,35 @@ services:
       - TZ=Asia/Tokyo
       - DISPLAY=${DISPLAY}
       - QT_X11_NO_MITSHM=1
+      - SSH_AUTH_SOCK=/ssh-auth-sock
       # - "RCUTILS_CONSOLE_OUTPUT_FORMAT=[{severity}] [{time}] [{name}] [{file_name}:{line_number}:{function_name}]: {message}" # set the ROS2 log format
     volumes:
-      - /tmp/.X11-unix:/tmp/.X11-unix:rw
       - ./output:/output
       - ./aichallenge:/aichallenge
       - ../autoware-practice:/autoware-practice
-      - $HOME/.tmux.conf:$HOME/.tmux.conf"
-    # privileged: true
-    # devices:
-    #   - /dev/dri:/dev/dri
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      - ${SSH_AUTH_SOCK}:/ssh-auth-sock
+      - ${HOME}/.ssh:${HOME}/.ssh
+      - ${HOME}/.tmux:${HOME}/.tmux
+      - ${HOME}/.tmux.conf:${HOME}/.tmux.conf
+      - bash_history:/commandhistory
+      - user_config:${HOME}/.config
+      - ros2_log:${HOME}/.ros/log
+      - ccache:${HOME}/.cache/ccache
+    privileged: true
+    devices:
+      - /dev/dri:/dev/dri
 
     command: /bin/bash -i -c "echo -e 'start aichallenge!' && sleep infinity"
+
+volumes:
+  bash_history:
+    driver: local
+  user_config:
+    driver: local
+  ros2_log:
+    driver: local
+  ccache:
+    driver: local
+  vscode_server:
+    driver: local
