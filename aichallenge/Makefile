@@ -4,7 +4,7 @@ sim:
 	@echo "Start AWSIM"
 	@/aichallenge/simulator/AWSIM/AWSIM.x86_64 > /dev/null
 
-sim-gpu:
+gpu-sim:
 	@sudo ip link set multicast on lo
 	@sudo sysctl -w net.core.rmem_max=2147483647 >/dev/null
 	@echo "Start AWSIM with GPU"
