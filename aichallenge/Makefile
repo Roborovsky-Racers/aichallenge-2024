@@ -17,6 +17,7 @@ rviz:
 aw:
 	@echo "Start Auwoware"
 	ros2 run aichallenge_system_launch object_marker.py &
+	ros2 run aichallenge_system_launch control_mode_adapter.py &
 	ros2 launch aichallenge_submit_launch aichallenge_submit.launch.xml
 
 start:
