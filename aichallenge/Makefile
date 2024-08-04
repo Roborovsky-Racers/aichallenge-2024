@@ -6,7 +6,7 @@ sim:
 
 rviz:
 	@echo "Start RVIZ"
-	ros2 run rviz2 rviz2 -d /aichallenge/workspace/src/aichallenge_system/aichallenge_system_launch/config/autoware.rviz.custom &
+	@ros2 run rviz2 rviz2 -d /aichallenge/workspace/src/aichallenge_system/aichallenge_system_launch/config/autoware.rviz.custom --ros-args -r rviz:/initialpose:=/localization/initial_pose3d &
 	@ros2 run aichallenge_system_launch object_marker.py &
 
 aw:
@@ -26,6 +26,7 @@ start:
 reset:
 	@echo "Reset simulation"
 	@ros2 topic pub --once /aichallenge/awsim/reset std_msgs/msg/Empty {} >/dev/null &
+	@ros2 run multi_purpose_mpc_ros publish_initialpose
 
 kill:
 	@echo "Kill all"
