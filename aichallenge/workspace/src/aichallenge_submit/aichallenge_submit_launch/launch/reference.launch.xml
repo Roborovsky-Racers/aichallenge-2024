@@ -16,8 +16,6 @@
   <arg name="launch_vehicle_interface" default="false"/>
   <!-- System -->
   <arg name="system_run_mode" default="online" description="run mode in system"/>
-  <!-- MPC -->
-  <arg name="mpc_config_path" default="$(find-pkg-share multi_purpose_mpc_ros)/config/config.yaml" description="MPC config file path"/>
 
   <!-- Global parameters -->
   <group scoped="false">
@@ -216,11 +214,6 @@
     <remap from="input/trajectory" to="/planning/scenario_planning/trajectory"/>
     <remap from="output/control_cmd" to="/control/command/control_cmd"/>
   </node> -->
-
-  <node pkg="multi_purpose_mpc_ros" exec="run_mpc_controller.bash" name="mpc_controller" output="screen"
-    args="--config_path $(var mpc_config_path)">
-    <param name="use_sim_time" value="true"/>
-  </node>
 
   <!-- Map -->
   <group>

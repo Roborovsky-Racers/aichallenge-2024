@@ -7,6 +7,9 @@
     <arg name="map_path" value="$(find-pkg-share aichallenge_submit_launch)/map"/>
   </include>
 
+  <!-- MPC -->
+  <include file="$(find-pkg-share multi_purpose_mpc_ros)/launch/mpc_controller.launch.py" />
+
   <!-- place a goal pose anywhere you like-->
   <node pkg="goal_pose_setter" exec="goal_pose_setter_node" name="goal_pose_setter" output="screen">
     <param from="$(find-pkg-share goal_pose_setter)/config/default_goal_pose.param.yaml" />
