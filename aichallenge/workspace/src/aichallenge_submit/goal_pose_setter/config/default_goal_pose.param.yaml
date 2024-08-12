@@ -1,12 +1,20 @@
 /**:
   ros__parameters:
-    goal.position.x: 89653.7
-    goal.position.y: 43122.5
+    # goal.position.x: 89653.7
+    # goal.position.y: 43122.5
+    # goal.position.z: 0.0
+    # goal.orientation.x: 0.0
+    # goal.orientation.y: 0.0
+    # goal.orientation.z: -0.971732
+    # goal.orientation.w: 0.236088
+
+    goal.position.x: 89637.41780001602
+    goal.position.y: 43123.015199306516
     goal.position.z: 0.0
     goal.orientation.x: 0.0
     goal.orientation.y: 0.0
-    goal.orientation.z: -0.971732
-    goal.orientation.w: 0.236088
+    goal.orientation.z: -0.8788172006607056
+    goal.orientation.w: -0.47715866565704346
 
     half_goal.position.x: 89657.0
     half_goal.position.y: 43175.0
@@ -16,4 +24,17 @@
     half_goal.orientation.z: -0.9
     half_goal.orientation.w: 0.25
 
-    goal_range: 10.0
+    pit_goal.position.x: 89626.3671875
+    pit_goal.position.y: 43134.921875
+    pit_goal.position.z: 42.10000228881836
+    pit_goal.orientation.x: 0.0
+    pit_goal.orientation.y: 0.0
+    pit_goal.orientation.z: -0.8788172006607056
+    pit_goal.orientation.w: -0.47715866565704346
+
+    goal_range: 20.0
+    pit_in_range: 3.0
+
+    enable_pit: true
+    pit_in_condition_threshold: 760 # 1000 - 30 * 8
+    pit_stop_time_threshold: 2.9
