@@ -36,5 +36,5 @@
     pit_in_range: 3.0
 
     enable_pit: true
-    pit_in_condition_threshold: 760 # 1000 - 30 * 8
+    pit_in_condition_threshold: 700
     pit_stop_time_threshold: 2.9
