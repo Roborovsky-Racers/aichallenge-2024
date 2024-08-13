@@ -17,7 +17,7 @@ aw:
 
 mpc: start
 	@echo "Start MPC"
-	@ros2 launch multi_purpose_mpc_ros mpc_controller.launch.py &
+	@ros2 launch multi_purpose_mpc_ros mpc_controller.launch.py
 
 start:
 	@echo "Start cotnrol"
