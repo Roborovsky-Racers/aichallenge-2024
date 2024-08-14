@@ -13,11 +13,11 @@ aw:
 	@echo "Start Auwoware"
 	@ros2 run aichallenge_system_launch control_mode_adapter.py &
 	@ros2 run goal_pose_setter goal_pose_setter_node --ros-args --params-file $(shell ros2 pkg prefix --share goal_pose_setter)/config/default_goal_pose.param.yaml &
-	@ros2 launch aichallenge_submit_launch reference.launch.xml vehicle_model:=racing_kart sensor_model:=racing_kart_sensor_kit map_path:=$(shell ros2 pkg prefix --share aichallenge_submit_launch)/map &
+	@ros2 launch aichallenge_submit_launch reference.launch.xml vehicle_model:=racing_kart sensor_model:=racing_kart_sensor_kit map_path:=$(shell ros2 pkg prefix --share aichallenge_submit_launch)/map >autoware.log 2>&1 &
 
 mpc: start
 	@echo "Start MPC"
-	@ros2 launch multi_purpose_mpc_ros mpc_controller.launch.py &
+	@ros2 launch multi_purpose_mpc_ros mpc_controller.launch.py
 
 start:
 	@echo "Start cotnrol"
@@ -33,5 +33,7 @@ kill:
 	@bash -i -c "rkill"
 
 setup: sim rviz aw
+	@echo ""
 
 all: sim rviz aw mpc
+	@echo ""
