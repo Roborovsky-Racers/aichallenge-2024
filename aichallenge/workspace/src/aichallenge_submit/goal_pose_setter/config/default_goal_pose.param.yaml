@@ -33,7 +33,7 @@
     pit_goal.orientation.w: -0.47715866565704346
 
     goal_range: 20.0
-    pit_in_range: 3.0
+    pit_in_range: 2.5
 
     enable_pit: true
     pit_in_condition_threshold: 700
