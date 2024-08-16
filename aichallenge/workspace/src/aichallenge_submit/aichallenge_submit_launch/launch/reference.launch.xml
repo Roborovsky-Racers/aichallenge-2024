@@ -248,11 +248,12 @@
 
     </node_container>
 
+  </group>  <!-- map -->
 
   <!-- RViz -->
-  <!-- <group>
+  <group>
     <node pkg="aichallenge_submit_launch" exec="rviz.bash" name="rviz2_bash" output="screen"/>
-  </group> -->
+  </group>
 
   <!-- API -->
   <group>
