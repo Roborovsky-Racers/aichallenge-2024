@@ -21,7 +21,7 @@
   </include>
 
   <!-- MPC -->
-  <include file="$(find-pkg-share multi_purpose_mpc_ros)/launch/mpc_controller.launch.py" />
+  <!-- <include file="$(find-pkg-share multi_purpose_mpc_ros)/launch/mpc_controller.launch.py" /> -->
 
   <!-- place a goal pose anywhere you like-->
   <node pkg="goal_pose_setter" exec="goal_pose_setter_node" name="goal_pose_setter" output="screen">
