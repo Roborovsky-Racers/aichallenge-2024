@@ -6,7 +6,7 @@
     <DockSplitter sizes="1" count="1" orientation="-">
      <DockArea name="...">
       <plot style="LinesAndDots" mode="XYPlot" flip_x="false" flip_y="false">
-       <range right="89708.168265" bottom="43119.459798" top="43166.713299" left="89581.674277"/>
+       <range right="89745.969835" bottom="43118.621356" top="43190.204107" left="89547.967161"/>
        <limitY/>
        <curve curve_y="/sensing/gnss/pose_with_covariance/pose/pose/position/y" name="/sensing/gnss/pose_with_covariance/pose/pose/position/[x;y]" curve_x="/sensing/gnss/pose_with_covariance/pose/pose/position/x" color="#1ac938"/>
       </plot>
@@ -17,17 +17,17 @@
   <Tab tab_name="sensor/cmd" containers="1">
    <Container>
     <DockSplitter sizes="0.333333;0.333333;0.333333" count="3" orientation="-">
-     <DockSplitter sizes="0.250346;0.249423;0.250346;0.249885" count="4" orientation="|">
+     <DockSplitter sizes="0.250336;0.249439;0.250336;0.249888" count="4" orientation="|">
       <DockArea name="...">
        <plot style="Lines" mode="TimeSeries" flip_x="false" flip_y="false">
-        <range right="35.638428" bottom="-0.502935" top="0.632435" left="0.000000"/>
+        <range right="105.363326" bottom="-0.502935" top="0.632435" left="0.000000"/>
         <limitY/>
         <curve name="/sensing/imu/imu_raw/angular_velocity/x" color="#1f77b4"/>
        </plot>
       </DockArea>
       <DockArea name="...">
        <plot style="Lines" mode="TimeSeries" flip_x="false" flip_y="false">
-        <range right="35.638428" bottom="-1.240580" top="1.301493" left="0.000000"/>
+        <range right="105.363326" bottom="-1.331168" top="1.303702" left="0.000000"/>
         <limitY/>
         <curve name="/sensing/imu/imu_raw/linear_acceleration/x" color="#ff7f0e"/>
         <curve name="/control/command/control_cmd/longitudinal/acceleration" color="#1ac938"/>
@@ -35,55 +35,55 @@
       </DockArea>
       <DockArea name="...">
        <plot style="Lines" mode="TimeSeries" flip_x="false" flip_y="false">
-        <range right="35.638428" bottom="1.772320" top="2.129429" left="0.000000"/>
+        <range right="105.363326" bottom="-3.296231" top="3.291102" left="0.000000"/>
         <limitY/>
         <curve name="/sensing/imu/imu_raw/orientation/roll" color="#17becf"/>
        </plot>
       </DockArea>
       <DockArea name="...">
        <plot style="Lines" mode="TimeSeries" flip_x="false" flip_y="false">
-        <range right="35.638428" bottom="4.596912" top="5.830917" left="0.000000"/>
+        <range right="105.363326" bottom="4.594062" top="5.947754" left="0.000000"/>
         <limitY/>
         <curve name="/vehicle/status/velocity_status/longitudinal_velocity" color="#9467bd"/>
         <curve name="/control/command/control_cmd/longitudinal/speed" color="#ff7f0e"/>
        </plot>
       </DockArea>
      </DockSplitter>
-     <DockSplitter sizes="0.25127;0.248499;0.25127;0.248961" count="4" orientation="|">
+     <DockSplitter sizes="0.251234;0.248542;0.251682;0.248542" count="4" orientation="|">
       <DockArea name="...">
        <plot style="Lines" mode="TimeSeries" flip_x="false" flip_y="false">
-        <range right="35.638428" bottom="-0.333738" top="0.544509" left="0.000000"/>
+        <range right="105.363326" bottom="-0.334830" top="0.544536" left="0.000000"/>
         <limitY/>
         <curve name="/sensing/imu/imu_raw/angular_velocity/y" color="#d62728"/>
        </plot>
       </DockArea>
       <DockArea name="...">
        <plot style="Lines" mode="TimeSeries" flip_x="false" flip_y="false">
-        <range right="35.638428" bottom="-0.804984" top="1.083914" left="0.000000"/>
+        <range right="105.363326" bottom="-0.998047" top="1.088623" left="0.000000"/>
         <limitY/>
         <curve name="/sensing/imu/imu_raw/linear_acceleration/y" color="#f14cc1"/>
        </plot>
       </DockArea>
       <DockArea name="...">
        <plot style="Lines" mode="TimeSeries" flip_x="false" flip_y="false">
-        <range right="35.638428" bottom="-1.157925" top="0.733256" left="0.000000"/>
+        <range right="105.363326" bottom="-1.415208" top="0.885362" left="0.000000"/>
         <limitY/>
         <curve name="/sensing/imu/imu_raw/orientation/pitch" color="#bcbd22"/>
        </plot>
       </DockArea>
       <DockArea name="...">
        <plot style="Lines" mode="TimeSeries" flip_x="false" flip_y="false">
-        <range right="35.638428" bottom="-0.012750" top="0.942750" left="0.000000"/>
+        <range right="105.363326" bottom="-0.023000" top="0.943000" left="0.000000"/>
         <limitY/>
         <curve name="/vehicle/status/actuation_status/status/accel_status" color="#1f77b4"/>
         <curve name="/vehicle/status/actuation_status/status/brake_status" color="#d62728"/>
        </plot>
       </DockArea>
      </DockSplitter>
-     <DockSplitter sizes="0.25127;0.248499;0.25127;0.248961" count="4" orientation="|">
+     <DockSplitter sizes="0.251234;0.248542;0.251682;0.248542" count="4" orientation="|">
       <DockArea name="...">
        <plot style="Lines" mode="TimeSeries" flip_x="false" flip_y="false">
-        <range right="35.638428" bottom="-1.488639" top="1.897504" left="0.000000"/>
+        <range right="105.363326" bottom="-1.666082" top="1.999200" left="0.000000"/>
         <limitY/>
         <curve name="/sensing/imu/imu_raw/angular_velocity/z" color="#1ac938"/>
         <curve name="/vehicle/status/velocity_status/heading_rate" color="#f14cc1"/>
@@ -91,21 +91,21 @@
       </DockArea>
       <DockArea name="...">
        <plot style="Lines" mode="TimeSeries" flip_x="false" flip_y="false">
-        <range right="35.638428" bottom="-0.281976" top="2.250483" left="0.000000"/>
+        <range right="105.363326" bottom="-0.493433" top="2.255640" left="0.000000"/>
         <limitY/>
         <curve name="/sensing/imu/imu_raw/linear_acceleration/z" color="#9467bd"/>
        </plot>
       </DockArea>
       <DockArea name="...">
        <plot style="Lines" mode="TimeSeries" flip_x="false" flip_y="false">
-        <range right="35.638428" bottom="-3.294489" top="3.136954" left="0.000000"/>
+        <range right="105.363326" bottom="-3.298418" top="3.298020" left="0.000000"/>
         <limitY/>
         <curve name="/sensing/imu/imu_raw/orientation/yaw" color="#1f77b4"/>
        </plot>
       </DockArea>
       <DockArea name="...">
        <plot style="Lines" mode="TimeSeries" flip_x="false" flip_y="false">
-        <range right="35.638428" bottom="-0.348940" top="0.448484" left="0.000000"/>
+        <range right="105.363326" bottom="-0.376637" top="0.449159" left="0.000000"/>
         <limitY/>
         <curve name="/vehicle/status/steering_status/steering_tire_angle" color="#17becf"/>
         <curve name="/vehicle/status/actuation_status/status/steer_status" color="#bcbd22"/>
@@ -113,6 +113,33 @@
        </plot>
       </DockArea>
      </DockSplitter>
+    </DockSplitter>
+   </Container>
+  </Tab>
+  <Tab tab_name="calib" containers="1">
+   <Container>
+    <DockSplitter sizes="0.333333;0.333333;0.333333" count="3" orientation="-">
+     <DockArea name="...">
+      <plot style="Lines" mode="TimeSeries" flip_x="false" flip_y="false">
+       <range right="105.278260" bottom="2.934774" top="3.802860" left="27.275279"/>
+       <limitY/>
+       <curve name="/accel_brake_map_calibrator/output/current_map_error/data" color="#9467bd"/>
+      </plot>
+     </DockArea>
+     <DockArea name="...">
+      <plot style="Lines" mode="TimeSeries" flip_x="false" flip_y="false">
+       <range right="105.278260" bottom="2.934771" top="3.802857" left="27.275279"/>
+       <limitY/>
+       <curve name="/accel_brake_map_calibrator/output/updated_map_error/data" color="#17becf"/>
+      </plot>
+     </DockArea>
+     <DockArea name="...">
+      <plot style="Lines" mode="TimeSeries" flip_x="false" flip_y="false">
+       <range right="105.278260" bottom="0.999998" top="0.999999" left="27.275279"/>
+       <limitY/>
+       <curve name="/accel_brake_map_calibrator/output/map_error_ratio/data" color="#bcbd22"/>
+      </plot>
+     </DockArea>
     </DockSplitter>
    </Container>
   </Tab>
@@ -141,7 +168,7 @@
    <max_array_size value="100"/>
    <boolean_strings_to_number value="true"/>
    <remove_suffix_from_strings value="true"/>
-   <selected_topics value="/control/command/actuation_cmd;/control/command/control_cmd;/sensing/gnss/pose_with_covariance;/sensing/imu/imu_raw;/vehicle/status/actuation_status;/vehicle/status/control_mode;/vehicle/status/gear_status;/vehicle/status/steering_status;/vehicle/status/velocity_status"/>
+   <selected_topics value="/control/command/actuation_cmd;/control/command/control_cmd;/sensing/gnss/pose_with_covariance;/sensing/imu/imu_raw;/vehicle/status/actuation_status;/vehicle/status/control_mode;/vehicle/status/gear_status;/vehicle/status/steering_status;/vehicle/status/velocity_status;/accel_brake_map_calibrator/output/current_map_error;/accel_brake_map_calibrator/output/updated_map_error;/accel_brake_map_calibrator/output/map_error_ratio"/>
   </plugin>
   <plugin ID="UDP Server"/>
   <plugin ID="WebSocket Server"/>
@@ -157,16 +184,7 @@
  </Plugins>
  <!-- - - - - - - - - - - - - - - -->
  <previouslyLoaded_Datafiles>
-  <fileInfo prefix="" filename="../workspace/0920_demo_interface_only/metadata.yaml">
-   <plugin ID="DataLoad ROS2 bags">
-    <use_header_stamp value="false"/>
-    <discard_large_arrays value="true"/>
-    <max_array_size value="100"/>
-    <boolean_strings_to_number value="true"/>
-    <remove_suffix_from_strings value="true"/>
-    <selected_topics value="/control/command/actuation_cmd;/control/command/control_cmd;/sensing/gnss/pose_with_covariance;/sensing/imu/imu_raw;/vehicle/status/actuation_status;/vehicle/status/control_mode;/vehicle/status/gear_status;/vehicle/status/steering_status;/vehicle/status/velocity_status"/>
-   </plugin>
-  </fileInfo>
+  <fileInfo prefix="" filename="../workspace/0920_demo_interface_only/metadata.yaml"/>
  </previouslyLoaded_Datafiles>
  <previouslyLoaded_Streamer name="ROS2 Topic Subscriber"/>
  <!-- - - - - - - - - - - - - - - -->
