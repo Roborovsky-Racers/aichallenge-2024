@@ -8,13 +8,20 @@ sim:
 	@echo "Start AWSIM"
 	@${AWSIM_PATH}/AWSIM.x86_64 --timeout 86400.0 &
 
+rviz:
+	@ros2 run rviz2 rviz2 -d $(RVIZ_CONFIG) -s $(RVIZ_IMAGE)
+
 aw:
 	@echo "Start Autoware"
 	@ros2 launch aichallenge_system_launch aichallenge_system.launch.xml rviz_config:=$(RVIZ_CONFIG) >autoware.log 2>&1 &
 
 mpc: start
 	@echo "Start MPC"
-	@ros2 launch multi_purpose_mpc_ros mpc_controller.launch.py
+	@ros2 launch multi_purpose_mpc_ros mpc_controller.launch.py use_sim_time:=true use_boost_acceleration:=false use_obstacle_avoidance:=false
+
+mpc-real: start
+	@echo "Start MPC"
+	@ros2 launch multi_purpose_mpc_ros mpc_controller.launch.py use_sim_time:=false use_boost_acceleration:=false use_obstacle_avoidance:=false
 
 start: reset
 	@echo "Start cotnrol"
