@@ -13,19 +13,27 @@ rviz:
 
 aw:
 	@echo "Start Autoware"
-	@ros2 launch aichallenge_system_launch aichallenge_system.launch.xml rviz_config:=$(RVIZ_CONFIG) >autoware.log 2>&1 &
+	@ros2 launch aichallenge_system_launch aichallenge_system.launch.xml simulation:=true use_sim_time:=true run_rviz:=true rviz_config:=$(RVIZ_CONFIG) >autoware.log 2>&1 &
 
 mpc: start
 	@echo "Start MPC"
-	@ros2 launch multi_purpose_mpc_ros mpc_controller.launch.py use_sim_time:=true use_boost_acceleration:=false use_obstacle_avoidance:=false
+	@ros2 launch multi_purpose_mpc_ros mpc_controller.launch.py use_sim_time:=true use_boost_acceleration:=false use_obstacle_avoidance:=false use_stats:=true
 
 mpc-real: start
 	@echo "Start MPC"
-	@ros2 launch multi_purpose_mpc_ros mpc_controller.launch.py use_sim_time:=false use_boost_acceleration:=false use_obstacle_avoidance:=false
+	@ros2 launch multi_purpose_mpc_ros mpc_controller.launch.py use_sim_time:=false use_boost_acceleration:=false use_obstacle_avoidance:=false use_stats:=true
 
 start: reset
 	@echo "Start cotnrol"
 	@ros2 service call /control/control_mode_request autoware_auto_vehicle_msgs/srv/ControlModeCommand '{mode: 1}' >/dev/null &
+
+stop:
+	@echo "Request Stop!"
+	@ros2 topic pub /control/mpc/stop_request std_msgs/msg/Empty {} -r 10 -t 30
+
+restart:
+	@echo "Request Restart"
+	@ros2 topic pub /control/control_mode_request_topic std_msgs/msg/Bool "data: true" -r 10 -t 20
 
 reset:
 	@echo "Reset simulation"
