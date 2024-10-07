@@ -8,7 +8,7 @@ case "${target}" in
     volume="output:/output"
     ;;
 "dev")
-    volume="output:/output aichallenge:/aichallenge $HOME/aic/autoware-practice:/autoware-practice $HOME/.tmux.conf:$HOME/.tmux.conf"
+    volume="output:/output aichallenge:/aichallenge"
     ;;
 *)
     echo "invalid argument (use 'dev' or 'eval')"

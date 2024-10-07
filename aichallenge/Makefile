@@ -12,8 +12,13 @@ rviz:
 	@ros2 run rviz2 rviz2 -d $(RVIZ_CONFIG) -s $(RVIZ_IMAGE)
 
 aw:
-	@echo "Start Autoware"
+	@echo "Start Autoware in SIM"
 	@ros2 launch aichallenge_system_launch aichallenge_system.launch.xml simulation:=true use_sim_time:=true run_rviz:=true rviz_config:=$(RVIZ_CONFIG) >autoware.log 2>&1 &
+
+vehicle:
+	@echo "Start Autoware in REAL"
+	@sudo ip link set multicast on lo
+	@ros2 launch aichallenge_system_launch aichallenge_system.launch.xml simulation:=false use_sim_time:=false run_rviz:=false rviz_config:=$(RVIZ_CONFIG)
 
 mpc: start
 	@echo "Start MPC"
@@ -36,7 +41,7 @@ restart:
 	@ros2 topic pub /control/control_mode_request_topic std_msgs/msg/Bool "data: true" -r 10 -t 20
 
 reset:
-	@echo "Reset simulation"
+	@echo "Reset simulation and publish initialpose"
 	@ros2 topic pub --once /aichallenge/awsim/reset std_msgs/msg/Empty {} >/dev/null &
 	@ros2 run multi_purpose_mpc_ros publish_initialpose
 
@@ -47,6 +52,10 @@ kill:
 setup: sim aw
 	@echo ""
 
+record:
+	@echo "Start rosbag recording"
+	@mkdir -p rosbag2_autoware
+	@cd rosbag2_autoware && ros2 bag record -a
 
 all: sim aw mpc
 	@echo ""
