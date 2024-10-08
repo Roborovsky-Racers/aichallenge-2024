@@ -64,9 +64,17 @@ SensorConverter::SensorConverter(const rclcpp::NodeOptions & node_options)
 
 void SensorConverter::on_gnss_pose(const PoseStamped::ConstSharedPtr msg)
 {
+  static rclcpp::Time last_pub_time = get_clock()->now();
+  constexpr double RATE = 16.0;
+  const auto msg_time = rclcpp::Time(msg->header.stamp);
+  if ((msg_time - last_pub_time).seconds() < 1.0 / RATE)
+  {
+    return;
+  }
+  last_pub_time = msg_time;
   auto process_and_publish_gnss = [this, msg]() {
     rclcpp::sleep_for(std::chrono::milliseconds(gnss_pose_delay_));
-    
+
     auto pose = std::make_shared<PoseStamped>(*msg);
     pose->header.stamp = now();
     pose->pose.position.x += pose_distribution_(generator_);
@@ -87,9 +95,16 @@ void SensorConverter::on_gnss_pose(const PoseStamped::ConstSharedPtr msg)
 
 void SensorConverter::on_gnss_pose_cov(const PoseWithCovarianceStamped::ConstSharedPtr msg)
 {
+  static rclcpp::Time last_pub_time = get_clock()->now();
+  constexpr double RATE = 16.0;
+  const auto msg_time = rclcpp::Time(msg->header.stamp);
+  if ((msg_time - last_pub_time).seconds() < 1.0 / RATE)
+  {
+    return;
+  }
     auto process_and_publish_gnss_cov = [this, msg]() {
     rclcpp::sleep_for(std::chrono::milliseconds(gnss_pose_cov_delay_));
-    
+
     auto pose_cov = std::make_shared<PoseWithCovarianceStamped>(*msg);
     pose_cov->header.stamp = now();
     pose_cov->pose.pose.position.x += pose_cov_distribution_(generator_);
