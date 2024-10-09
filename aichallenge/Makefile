@@ -1,4 +1,5 @@
-RVIZ_CONFIG="/aichallenge/workspace/src/aichallenge_system/aichallenge_system_launch/config/debug_sensing.rviz"
+# RVIZ_CONFIG="/aichallenge/workspace/src/aichallenge_system/aichallenge_system_launch/config/debug_sensing.rviz"
+RVIZ_CONFIG="/aichallenge/workspace/src/aichallenge_system/aichallenge_system_launch/config/debug_sensing.rviz.custom"
 RVIZ_IMAGE="/aichallenge/workspace/src/aichallenge_system/aichallenge_system_launch/rviz/image/autoware.png"
 MAP_YAML_FILE="/aichallenge/workspace/src/aichallenge_submit/multi_purpose_mpc_ros/multi_purpose_mpc_ros/maps/occupancy_grid_map.yaml"
 
