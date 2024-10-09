@@ -1,6 +1,6 @@
 RVIZ_CONFIG="/aichallenge/workspace/src/aichallenge_system/aichallenge_system_launch/config/debug_sensing.rviz"
-# RVIZ_CONFIG="/aichallenge/workspace/src/aichallenge_system/aichallenge_system_launch/config/autoware.rviz.custom"
 RVIZ_IMAGE="/aichallenge/workspace/src/aichallenge_system/aichallenge_system_launch/rviz/image/autoware.png"
+MAP_YAML_FILE="/aichallenge/workspace/src/aichallenge_submit/multi_purpose_mpc_ros/multi_purpose_mpc_ros/maps/occupancy_grid_map.yaml"
 
 sim:
 	@sudo ip link set multicast on lo
@@ -51,6 +51,10 @@ kill:
 
 setup: sim aw
 	@echo ""
+
+map:
+	@echo "Start map server"
+	@ros2 launch aichallenge_submit_launch map_server.launch.py map_yaml_file:=$(MAP_YAML_FILE)
 
 record:
 	@echo "Start rosbag recording"
