@@ -53,6 +53,9 @@ kill:
 setup: sim aw
 	@echo ""
 
+setup-real: vehicle
+	@echo ""
+
 map:
 	@echo "Start map server"
 	@ros2 launch aichallenge_submit_launch map_server.launch.py map_yaml_file:=$(MAP_YAML_FILE)
