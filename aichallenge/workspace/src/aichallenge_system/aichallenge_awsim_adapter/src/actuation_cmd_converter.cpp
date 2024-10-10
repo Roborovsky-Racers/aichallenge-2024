@@ -44,6 +44,15 @@ ActuationCmdConverter::ActuationCmdConverter(const rclcpp::NodeOptions & node_op
     RCLCPP_ERROR(get_logger(), "Cannot read brakemap. csv path = %s. stop calculation.", csv_path_brake_map.c_str());
     throw std::runtime_error("Cannot read brakemap.");
   }
+
+  delayed_cmd_pub_thread_ = std::thread([this]() {
+    auto rate = rclcpp::Rate(200);
+
+    while (rclcpp::ok()) {
+      pop_and_publish_delayed_cmd(now());
+      rate.sleep();
+    }
+  });
 }
 
 void ActuationCmdConverter::on_gear_report(const GearReport::ConstSharedPtr msg)
@@ -65,19 +74,22 @@ void ActuationCmdConverter::on_actuation_cmd(const ActuationCommandStamped::Cons
 
   const double velocity = std::abs(velocity_report_->longitudinal_velocity);
   const double acceleration = get_acceleration(*msg, velocity);
-  // Add steer_cmd to history. Limit -35 deg to 35 deg
-  steer_cmd_history_.emplace_back(msg->header.stamp, std::clamp(msg->actuation.steer_cmd, -0.61, 0.61));
 
+  // clamp steer cmd: -35 deg to 35 deg
+  const double clamped_steer_cmd = std::clamp(msg->actuation.steer_cmd, -0.61, 0.61);
 
   // Publish ControlCommand
   constexpr float nan = std::numeric_limits<double>::quiet_NaN();
   AckermannControlCommand output;
   output.stamp = msg->header.stamp;
-  output.lateral.steering_tire_angle = get_delayed_steer_cmd(msg->header.stamp);
+  output.lateral.steering_tire_angle = clamped_steer_cmd;
   output.lateral.steering_tire_rotation_rate = nan;
   output.longitudinal.speed = nan;
   output.longitudinal.acceleration = static_cast<float>(acceleration);
-  pub_ackermann_->publish(output);
+
+  received_cmd_queue_.emplace_back(output);
+
+  // pub_ackermann_->publish(output);
 }
 
 double ActuationCmdConverter::get_acceleration(const ActuationCommandStamped & cmd, const double velocity)
@@ -102,5 +114,28 @@ double ActuationCmdConverter::get_delayed_steer_cmd(const rclcpp::Time& current_
   }
   return steer_cmd_history_.empty() ? 0.0 : steer_cmd_history_.front().second;
 }
+
+void ActuationCmdConverter::pop_and_publish_delayed_cmd(const rclcpp::Time& current_time) {
+  // RCLCPP_WARN(get_logger(), "current_time: %f", current_time.seconds());
+
+  while(!received_cmd_queue_.empty()) {
+    // get the oldest command
+    const auto& queue_cmd = received_cmd_queue_.front();
+
+    // check the elapsed time from the command published
+    const auto elapsed_from_cmd_published = current_time - queue_cmd.stamp;
+    if(elapsed_from_cmd_published < delay_) {
+      // if the elapsed time is less than the delay time, wait for the delay time
+      return;
+    }
+
+    // publish and pop the command if the elapsed time is more than the delay time
+    pub_ackermann_->publish(queue_cmd);
+    received_cmd_queue_.pop_front();
+    // RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 100, "Published delayed command elapsed time: %f", elapsed_from_cmd_published.seconds());
+    RCLCPP_INFO(get_logger(), "Published delayed command elapsed time: %f", elapsed_from_cmd_published.seconds());
+  }
+}
+
 #include <rclcpp_components/register_node_macro.hpp>
 RCLCPP_COMPONENTS_REGISTER_NODE(ActuationCmdConverter)
