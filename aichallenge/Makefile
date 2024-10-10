@@ -21,7 +21,7 @@ vehicle:
 	@sudo ip link set multicast on lo
 	@ros2 launch aichallenge_system_launch aichallenge_system.launch.xml simulation:=false use_sim_time:=false run_rviz:=false rviz_config:=$(RVIZ_CONFIG)
 
-mpc: start
+mpc: reset start-sim
 	@echo "Start MPC"
 	@ros2 launch multi_purpose_mpc_ros mpc_controller.launch.py use_sim_time:=true use_boost_acceleration:=false use_obstacle_avoidance:=false use_stats:=true
 
@@ -29,7 +29,7 @@ mpc-real: start
 	@echo "Start MPC"
 	@ros2 launch multi_purpose_mpc_ros mpc_controller.launch.py use_sim_time:=false use_boost_acceleration:=false use_obstacle_avoidance:=false use_stats:=true
 
-start: reset
+start-sim:
 	@echo "Start cotnrol"
 	@ros2 service call /control/control_mode_request autoware_auto_vehicle_msgs/srv/ControlModeCommand '{mode: 1}' >/dev/null &
 
@@ -37,13 +37,16 @@ stop:
 	@echo "Request Stop!"
 	@ros2 topic pub /control/mpc/stop_request std_msgs/msg/Empty {} -r 10 -t 30
 
-restart:
+start:
 	@echo "Request Restart"
-	@ros2 topic pub /control/control_mode_request_topic std_msgs/msg/Bool "data: true" -r 10 -t 20
+	@ros2 topic pub /control/mpc/start_request std_msgs/msg/Empty {} -r 10 -t 30
 
 reset:
 	@echo "Reset simulation and publish initialpose"
 	@ros2 topic pub --once /aichallenge/awsim/reset std_msgs/msg/Empty {} >/dev/null &
+	@ros2 run multi_purpose_mpc_ros publish_initialpose
+
+init:
 	@ros2 run multi_purpose_mpc_ros publish_initialpose
 
 kill:
