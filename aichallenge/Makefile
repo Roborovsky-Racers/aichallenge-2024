@@ -25,7 +25,7 @@ mpc: start
 	@echo "Start MPC"
 	@ros2 launch multi_purpose_mpc_ros mpc_controller.launch.py use_sim_time:=true use_boost_acceleration:=false use_obstacle_avoidance:=false use_stats:=true
 
-mpc-real: start
+mpc-real:
 	@echo "Start MPC"
 	@ros2 launch multi_purpose_mpc_ros mpc_controller.launch.py use_sim_time:=false use_boost_acceleration:=false use_obstacle_avoidance:=false use_stats:=true
 
@@ -63,7 +63,7 @@ map:
 record:
 	@echo "Start rosbag recording"
 	@mkdir -p rosbag2_autoware
-	@cd rosbag2_autoware && ros2 bag record -a
+	@cd rosbag2_autoware && ros2 bag record -a -x "(/racing_kart/.*|/to_can_bus|/from_can_bus)"
 
 all: sim aw mpc
 	@echo ""
