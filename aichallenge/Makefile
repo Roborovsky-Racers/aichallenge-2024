@@ -56,6 +56,9 @@ setup: sim aw
 setup-real: vehicle
 	@echo ""
 
+setup-bag:
+	@ros2 launch aichallenge_submit_launch course_viewer.launch.xml
+
 map:
 	@echo "Start map server"
 	@ros2 launch aichallenge_submit_launch map_server.launch.py map_yaml_file:=$(MAP_YAML_FILE)
