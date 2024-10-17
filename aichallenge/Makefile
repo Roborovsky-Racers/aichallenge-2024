@@ -14,6 +14,7 @@ rviz:
 
 aw:
 	@echo "Start Autoware in SIM"
+	@ros2 launch aichallenge_submit_launch additional.launch.xml &
 	@ros2 launch aichallenge_system_launch aichallenge_system.launch.xml simulation:=true use_sim_time:=true run_rviz:=true rviz_config:=$(RVIZ_CONFIG) >autoware.log 2>&1 &
 
 vehicle:

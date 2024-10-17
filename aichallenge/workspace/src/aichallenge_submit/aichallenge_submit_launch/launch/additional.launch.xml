@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+
+  <arg name="kinematic_state_rate" default="1.0"/>
+
+  <group>
+    <node pkg="multi_purpose_mpc_ros" exec="velocity_heat_odom_visualizer" name="velocity_heat_odom_visualizer" output="screen">
+      <remap from="/localization/kinematic_state" to="/localization/kinematic_state_throttle"/>
+    </node>
+
+    <node pkg="topic_tools" exec="throttle" name="kinemtic_state_throttle" output="screen" args="messages /localization/kinematic_state $(var kinematic_state_rate) /localization/kinematic_state_throttle"/>
+  </group>
+
+</launch>
