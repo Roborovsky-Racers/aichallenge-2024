@@ -1,5 +1,5 @@
 #!/bin/bash
-AWSIM_DIRECTORY=/aichallenge/simulator/AWSIM
+AWSIM_DIRECTORY=/aichallenge/simulator/AWSIM_CPU
 
 # Move working directory
 OUTPUT_DIRECTORY=$(date +%Y%m%d-%H%M%S)
@@ -21,6 +21,7 @@ sleep 20
 
 # Start Autoware
 echo "Start Autoware"
+# ros2 launch aichallenge_system_launch aichallenge_system.launch.xml rviz_config:=$(ros2 pkg prefix aichallenge_system_launch)/share/aichallenge_system_launch/config/autoware.rviz.custom >autoware.log 2>&1 &
 ros2 launch aichallenge_system_launch aichallenge_system.launch.xml simulation:=true use_sim_time:=true run_rviz:=true >autoware.log 2>&1 &
 PID_AUTOWARE=$!
 sleep 10
@@ -46,7 +47,7 @@ sleep 1
 
 # Set initial pose
 echo "Set initial pose"
-ros2 topic pub -1 /initialpose geometry_msgs/msg/PoseWithCovarianceStamped "{ 
+ros2 topic pub -1 /initialpose geometry_msgs/msg/PoseWithCovarianceStamped "{
   header: {
     frame_id: 'map'
   },
