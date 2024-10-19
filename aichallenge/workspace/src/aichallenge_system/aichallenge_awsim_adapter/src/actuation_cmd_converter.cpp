@@ -22,8 +22,14 @@ ActuationCmdConverter::ActuationCmdConverter(const rclcpp::NodeOptions & node_op
   // Parameters
   const std::string csv_path_accel_map = declare_parameter<std::string>("csv_path_accel_map");
   const std::string csv_path_brake_map = declare_parameter<std::string>("csv_path_brake_map");
+  accel_limit_ = this->declare_parameter<double>("accel_limit");
+  brake_limit_ = this->declare_parameter<double>("brake_limit");
+  steer_limit_ = this->declare_parameter<double>("steer_limit");
+  steer_rate_limit_ = this->declare_parameter<double>("steer_rate_limit");
   steer_delay_sec_ = this->declare_parameter<double>("steer_delay_sec");
-  delay_ = std::chrono::duration<double>(steer_delay_sec_);
+  accel_delay_sec_ = this->declare_parameter<double>("accel_delay_sec");
+  accel_delay_ = std::chrono::duration<double>(accel_delay_sec_);
+  steer_delay_ = std::chrono::duration<double>(steer_delay_sec_);
   // Subscriptions
   sub_actuation_ = create_subscription<ActuationCommandStamped>(
     "/control/command/actuation_cmd", 1, std::bind(&ActuationCmdConverter::on_actuation_cmd, this, _1));
@@ -31,6 +37,8 @@ ActuationCmdConverter::ActuationCmdConverter(const rclcpp::NodeOptions & node_op
     "/vehicle/status/gear_status", 1, std::bind(&ActuationCmdConverter::on_gear_report, this, _1));
   sub_velocity_ = create_subscription<VelocityReport>(
     "/vehicle/status/velocity_status", 1, std::bind(&ActuationCmdConverter::on_velocity_report, this, _1));
+  sub_steering_ = create_subscription<SteeringReport>(
+    "/vehicle/status/steering_status", 1, std::bind(&ActuationCmdConverter::on_steering_report, this, _1));
 
   // Publishers
   pub_ackermann_ = create_publisher<AckermannControlCommand>("/awsim/control_cmd", 1);
@@ -56,28 +64,77 @@ void ActuationCmdConverter::on_velocity_report(const VelocityReport::ConstShared
   velocity_report_ = msg;
 }
 
+void ActuationCmdConverter::on_steering_report(const SteeringReport::ConstSharedPtr msg)
+{
+  steering_report_ = msg;
+}
+
 void ActuationCmdConverter::on_actuation_cmd(const ActuationCommandStamped::ConstSharedPtr msg)
 {
   // Wait for input data
-  if (!gear_report_ || !velocity_report_) {
+  if (!gear_report_ || !velocity_report_ || !steering_report_) {
+    return;
+  }
+
+  // use node now instead of msg->header.stamp
+  const auto now = this->now();
+
+  const auto create_ackermann_command = [&now](const double accel_cmd, const double steer_cmd) {
+      constexpr float nan = std::numeric_limits<double>::quiet_NaN();
+      AckermannControlCommand output;
+      output.stamp = now;
+      output.lateral.steering_tire_angle = steer_cmd;
+      output.lateral.steering_tire_rotation_rate = nan;
+      output.longitudinal.speed = nan;
+      output.longitudinal.acceleration = accel_cmd;
+      return output;
+  };
+
+  if(!last_ackermann_cmd_.has_value()) {
+    last_ackermann_cmd_ = create_ackermann_command(0.0, 0.0);
+  }
+
+  // compute diff time between current and last ackermann command
+  const rclcpp::Time last_time(last_ackermann_cmd_->stamp);
+  const auto dt = (now - last_time).seconds();
+
+  if(dt < 0.0) {
+    RCLCPP_WARN(get_logger(), "detected time backward: %f -> ignore received actuation command", dt);
+    return;
+  } else if (dt < 1.0e-3) {
+    RCLCPP_WARN(get_logger(), "detected too small dt: %f -> ignore received actuation command", dt);
+    return;
+  }
+  if(dt > 0.5) {
+    RCLCPP_WARN(get_logger(), "dt is too large: %f -> reset internal ackermann command", dt);
+    last_ackermann_cmd_ = create_ackermann_command(last_ackermann_cmd_->longitudinal.acceleration, last_ackermann_cmd_->lateral.steering_tire_angle);
     return;
   }
 
   const double velocity = std::abs(velocity_report_->longitudinal_velocity);
   const double acceleration = get_acceleration(*msg, velocity);
-  // Add steer_cmd to history. Limit -35 deg to 35 deg
-  steer_cmd_history_.emplace_back(msg->header.stamp, std::clamp(msg->actuation.steer_cmd, -0.61, 0.61));
 
+  // Add accel|steer_cmd to history.
+  accel_cmd_history_.emplace_back(now, acceleration);
+  steer_cmd_history_.emplace_back(now, msg->actuation.steer_cmd);
+
+  // Get delayed accel and steer command with clamp
+  const double delayed_accel_cmd = std::clamp(get_delayed_cmd(accel_cmd_history_, now, accel_delay_), brake_limit_, accel_limit_);
+  double delayed_steer_cmd = std::clamp(get_delayed_cmd(steer_cmd_history_, now, steer_delay_), -steer_limit_, steer_limit_);
+
+  // limit steer command by steer rate
+  const auto steer_rate = (delayed_steer_cmd - last_ackermann_cmd_->lateral.steering_tire_angle) / dt;
+  if(std::abs(steer_rate) > steer_rate_limit_) {
+    const double sign = steer_rate > 0.0 ? 1.0 : -1.0;
+    delayed_steer_cmd = last_ackermann_cmd_->lateral.steering_tire_angle + sign * steer_rate_limit_ * dt;
+  } 
 
   // Publish ControlCommand
-  constexpr float nan = std::numeric_limits<double>::quiet_NaN();
-  AckermannControlCommand output;
-  output.stamp = msg->header.stamp;
-  output.lateral.steering_tire_angle = get_delayed_steer_cmd(msg->header.stamp);
-  output.lateral.steering_tire_rotation_rate = nan;
-  output.longitudinal.speed = nan;
-  output.longitudinal.acceleration = static_cast<float>(acceleration);
+  const auto output = create_ackermann_command(delayed_accel_cmd, delayed_steer_cmd);
   pub_ackermann_->publish(output);
+
+  // store last ackermann command
+  last_ackermann_cmd_ = output;
 }
 
 double ActuationCmdConverter::get_acceleration(const ActuationCommandStamped & cmd, const double velocity)
@@ -92,15 +149,18 @@ double ActuationCmdConverter::get_acceleration(const ActuationCommandStamped & c
   return ref_acceleration;
 }
 
-double ActuationCmdConverter::get_delayed_steer_cmd(const rclcpp::Time& current_time)
+double ActuationCmdConverter::get_delayed_cmd(
+  std::deque<std::pair<rclcpp::Time, double>>& cmd_history,
+  const rclcpp::Time& current_time,
+  const std::chrono::duration<double>& delay)
 {
-  // Delete old steer_cmd
-  while (!steer_cmd_history_.empty() && 
-         (current_time - steer_cmd_history_.front().first).seconds() > delay_.count())
+  // Delete old cmd
+  while (!cmd_history.empty() && 
+         (current_time - cmd_history.front().first).seconds() > delay.count())
   {
-    steer_cmd_history_.pop_front();
+    cmd_history.pop_front();
   }
-  return steer_cmd_history_.empty() ? 0.0 : steer_cmd_history_.front().second;
+  return cmd_history.empty() ? 0.0 : cmd_history.front().second;
 }
 #include <rclcpp_components/register_node_macro.hpp>
 RCLCPP_COMPONENTS_REGISTER_NODE(ActuationCmdConverter)
