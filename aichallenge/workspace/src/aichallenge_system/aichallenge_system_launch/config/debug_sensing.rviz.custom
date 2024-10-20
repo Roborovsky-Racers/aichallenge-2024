@@ -12,12 +12,13 @@ Panels:
         - /Localization1
         - /Localization1/EKF1
         - /Localization1/EKF1/Odometry1
+        - /Localization1/EKF1/Odometry1/Shape1
         - /Planning1/ScenarioPlanning1/ScenarioTrajectory1/View Path1
         - /Planning1/ScenarioPlanning1/ScenarioTrajectory1/View Velocity1
         - /Planning1/ScenarioPlanning1/LaneDriving1
         - /Multi-Purpose-MPC1
       Splitter Ratio: 0.6393442749977112
-    Tree Height: 665
+    Tree Height: 877
   - Class: rviz_common/Selection
     Name: Selection
   - Class: rviz_common/Tool Properties
@@ -648,7 +649,7 @@ Visualization Manager:
                 Alpha: 1
                 Axes Length: 1
                 Axes Radius: 0.10000000149011612
-                Color: 255; 25; 0
+                Color: 0; 170; 127
                 Head Length: 0.30000001192092896
                 Head Radius: 0.10000000149011612
                 Shaft Length: 1
@@ -1820,7 +1821,7 @@ Visualization Manager:
           Enabled: true
           Name: Prediction
           Namespaces:
-            mpc_pred: true
+            {}
           Topic:
             Depth: 5
             Durability Policy: Volatile
@@ -1843,18 +1844,289 @@ Visualization Manager:
           Value: true
       Enabled: true
       Name: Multi-Purpose-MPC
-    - Class: rviz_default_plugins/MarkerArray
-      Enabled: false
-      Name: VelHeatOdom
+    - Class: rviz_default_plugins/Marker
+      Enabled: true
+      Name: Marker
       Namespaces:
-        {}
+        vel_heat_odom_text_100: true
+        vel_heat_odom_text_101: true
+        vel_heat_odom_text_102: true
+        vel_heat_odom_text_103: true
+        vel_heat_odom_text_104: true
+        vel_heat_odom_text_105: true
+        vel_heat_odom_text_106: true
+        vel_heat_odom_text_107: true
+        vel_heat_odom_text_108: true
+        vel_heat_odom_text_109: true
+        vel_heat_odom_text_110: true
+        vel_heat_odom_text_111: true
+        vel_heat_odom_text_112: true
+        vel_heat_odom_text_113: true
+        vel_heat_odom_text_114: true
+        vel_heat_odom_text_115: true
+        vel_heat_odom_text_116: true
+        vel_heat_odom_text_117: true
+        vel_heat_odom_text_118: true
+        vel_heat_odom_text_119: true
+        vel_heat_odom_text_120: true
+        vel_heat_odom_text_121: true
+        vel_heat_odom_text_122: true
+        vel_heat_odom_text_123: true
+        vel_heat_odom_text_124: true
+        vel_heat_odom_text_125: true
+        vel_heat_odom_text_126: true
+        vel_heat_odom_text_127: true
+        vel_heat_odom_text_128: true
+        vel_heat_odom_text_129: true
+        vel_heat_odom_text_130: true
+        vel_heat_odom_text_131: true
+        vel_heat_odom_text_132: true
+        vel_heat_odom_text_133: true
+        vel_heat_odom_text_134: true
+        vel_heat_odom_text_135: true
+        vel_heat_odom_text_136: true
+        vel_heat_odom_text_137: true
+        vel_heat_odom_text_138: true
+        vel_heat_odom_text_139: true
+        vel_heat_odom_text_140: true
+        vel_heat_odom_text_141: true
+        vel_heat_odom_text_142: true
+        vel_heat_odom_text_143: true
+        vel_heat_odom_text_144: true
+        vel_heat_odom_text_145: true
+        vel_heat_odom_text_146: true
+        vel_heat_odom_text_147: true
+        vel_heat_odom_text_148: true
+        vel_heat_odom_text_149: true
+        vel_heat_odom_text_150: true
+        vel_heat_odom_text_151: true
+        vel_heat_odom_text_152: true
+        vel_heat_odom_text_153: true
+        vel_heat_odom_text_154: true
+        vel_heat_odom_text_155: true
+        vel_heat_odom_text_156: true
+        vel_heat_odom_text_157: true
+        vel_heat_odom_text_158: true
+        vel_heat_odom_text_159: true
+        vel_heat_odom_text_160: true
+        vel_heat_odom_text_161: true
+        vel_heat_odom_text_162: true
+        vel_heat_odom_text_163: true
+        vel_heat_odom_text_164: true
+        vel_heat_odom_text_165: true
+        vel_heat_odom_text_166: true
+        vel_heat_odom_text_167: true
+        vel_heat_odom_text_168: true
+        vel_heat_odom_text_169: true
+        vel_heat_odom_text_170: true
+        vel_heat_odom_text_171: true
+        vel_heat_odom_text_172: true
+        vel_heat_odom_text_173: true
+        vel_heat_odom_text_174: true
+        vel_heat_odom_text_175: true
+        vel_heat_odom_text_176: true
+        vel_heat_odom_text_177: true
+        vel_heat_odom_text_178: true
+        vel_heat_odom_text_179: true
+        vel_heat_odom_text_180: true
+        vel_heat_odom_text_181: true
+        vel_heat_odom_text_182: true
+        vel_heat_odom_text_183: true
+        vel_heat_odom_text_184: true
+        vel_heat_odom_text_185: true
+        vel_heat_odom_text_186: true
+        vel_heat_odom_text_187: true
+        vel_heat_odom_text_188: true
+        vel_heat_odom_text_189: true
+        vel_heat_odom_text_190: true
+        vel_heat_odom_text_191: true
+        vel_heat_odom_text_192: true
+        vel_heat_odom_text_193: true
+        vel_heat_odom_text_194: true
+        vel_heat_odom_text_195: true
+        vel_heat_odom_text_196: true
+        vel_heat_odom_text_197: true
+        vel_heat_odom_text_198: true
+        vel_heat_odom_text_199: true
+        vel_heat_odom_text_200: true
+        vel_heat_odom_text_201: true
+        vel_heat_odom_text_202: true
+        vel_heat_odom_text_203: true
+        vel_heat_odom_text_204: true
+        vel_heat_odom_text_205: true
+        vel_heat_odom_text_206: true
+        vel_heat_odom_text_207: true
+        vel_heat_odom_text_208: true
+        vel_heat_odom_text_209: true
+        vel_heat_odom_text_210: true
+        vel_heat_odom_text_211: true
+        vel_heat_odom_text_212: true
+        vel_heat_odom_text_213: true
+        vel_heat_odom_text_214: true
+        vel_heat_odom_text_215: true
+        vel_heat_odom_text_216: true
+        vel_heat_odom_text_217: true
+        vel_heat_odom_text_218: true
+        vel_heat_odom_text_219: true
+        vel_heat_odom_text_220: true
+        vel_heat_odom_text_221: true
+        vel_heat_odom_text_222: true
+        vel_heat_odom_text_223: true
+        vel_heat_odom_text_224: true
+        vel_heat_odom_text_225: true
+        vel_heat_odom_text_226: true
+        vel_heat_odom_text_227: true
+        vel_heat_odom_text_228: true
+        vel_heat_odom_text_229: true
+        vel_heat_odom_text_23: true
+        vel_heat_odom_text_230: true
+        vel_heat_odom_text_231: true
+        vel_heat_odom_text_232: true
+        vel_heat_odom_text_233: true
+        vel_heat_odom_text_234: true
+        vel_heat_odom_text_235: true
+        vel_heat_odom_text_236: true
+        vel_heat_odom_text_237: true
+        vel_heat_odom_text_238: true
+        vel_heat_odom_text_239: true
+        vel_heat_odom_text_24: true
+        vel_heat_odom_text_240: true
+        vel_heat_odom_text_241: true
+        vel_heat_odom_text_242: true
+        vel_heat_odom_text_243: true
+        vel_heat_odom_text_244: true
+        vel_heat_odom_text_245: true
+        vel_heat_odom_text_246: true
+        vel_heat_odom_text_247: true
+        vel_heat_odom_text_248: true
+        vel_heat_odom_text_249: true
+        vel_heat_odom_text_25: true
+        vel_heat_odom_text_250: true
+        vel_heat_odom_text_251: true
+        vel_heat_odom_text_252: true
+        vel_heat_odom_text_253: true
+        vel_heat_odom_text_254: true
+        vel_heat_odom_text_255: true
+        vel_heat_odom_text_256: true
+        vel_heat_odom_text_257: true
+        vel_heat_odom_text_258: true
+        vel_heat_odom_text_259: true
+        vel_heat_odom_text_26: true
+        vel_heat_odom_text_260: true
+        vel_heat_odom_text_261: true
+        vel_heat_odom_text_262: true
+        vel_heat_odom_text_263: true
+        vel_heat_odom_text_264: true
+        vel_heat_odom_text_265: true
+        vel_heat_odom_text_266: true
+        vel_heat_odom_text_267: true
+        vel_heat_odom_text_268: true
+        vel_heat_odom_text_269: true
+        vel_heat_odom_text_27: true
+        vel_heat_odom_text_270: true
+        vel_heat_odom_text_271: true
+        vel_heat_odom_text_272: true
+        vel_heat_odom_text_273: true
+        vel_heat_odom_text_274: true
+        vel_heat_odom_text_275: true
+        vel_heat_odom_text_276: true
+        vel_heat_odom_text_277: true
+        vel_heat_odom_text_278: true
+        vel_heat_odom_text_279: true
+        vel_heat_odom_text_28: true
+        vel_heat_odom_text_280: true
+        vel_heat_odom_text_281: true
+        vel_heat_odom_text_282: true
+        vel_heat_odom_text_283: true
+        vel_heat_odom_text_284: true
+        vel_heat_odom_text_285: true
+        vel_heat_odom_text_286: true
+        vel_heat_odom_text_287: true
+        vel_heat_odom_text_288: true
+        vel_heat_odom_text_289: true
+        vel_heat_odom_text_29: true
+        vel_heat_odom_text_290: true
+        vel_heat_odom_text_291: true
+        vel_heat_odom_text_292: true
+        vel_heat_odom_text_293: true
+        vel_heat_odom_text_30: true
+        vel_heat_odom_text_31: true
+        vel_heat_odom_text_32: true
+        vel_heat_odom_text_33: true
+        vel_heat_odom_text_34: true
+        vel_heat_odom_text_35: true
+        vel_heat_odom_text_36: true
+        vel_heat_odom_text_37: true
+        vel_heat_odom_text_38: true
+        vel_heat_odom_text_39: true
+        vel_heat_odom_text_40: true
+        vel_heat_odom_text_41: true
+        vel_heat_odom_text_42: true
+        vel_heat_odom_text_43: true
+        vel_heat_odom_text_44: true
+        vel_heat_odom_text_45: true
+        vel_heat_odom_text_46: true
+        vel_heat_odom_text_47: true
+        vel_heat_odom_text_48: true
+        vel_heat_odom_text_49: true
+        vel_heat_odom_text_50: true
+        vel_heat_odom_text_51: true
+        vel_heat_odom_text_52: true
+        vel_heat_odom_text_53: true
+        vel_heat_odom_text_54: true
+        vel_heat_odom_text_55: true
+        vel_heat_odom_text_56: true
+        vel_heat_odom_text_57: true
+        vel_heat_odom_text_58: true
+        vel_heat_odom_text_59: true
+        vel_heat_odom_text_60: true
+        vel_heat_odom_text_61: true
+        vel_heat_odom_text_62: true
+        vel_heat_odom_text_63: true
+        vel_heat_odom_text_64: true
+        vel_heat_odom_text_65: true
+        vel_heat_odom_text_66: true
+        vel_heat_odom_text_67: true
+        vel_heat_odom_text_68: true
+        vel_heat_odom_text_69: true
+        vel_heat_odom_text_70: true
+        vel_heat_odom_text_71: true
+        vel_heat_odom_text_72: true
+        vel_heat_odom_text_73: true
+        vel_heat_odom_text_74: true
+        vel_heat_odom_text_75: true
+        vel_heat_odom_text_76: true
+        vel_heat_odom_text_77: true
+        vel_heat_odom_text_78: true
+        vel_heat_odom_text_79: true
+        vel_heat_odom_text_80: true
+        vel_heat_odom_text_81: true
+        vel_heat_odom_text_82: true
+        vel_heat_odom_text_83: true
+        vel_heat_odom_text_84: true
+        vel_heat_odom_text_85: true
+        vel_heat_odom_text_86: true
+        vel_heat_odom_text_87: true
+        vel_heat_odom_text_88: true
+        vel_heat_odom_text_89: true
+        vel_heat_odom_text_90: true
+        vel_heat_odom_text_91: true
+        vel_heat_odom_text_92: true
+        vel_heat_odom_text_93: true
+        vel_heat_odom_text_94: true
+        vel_heat_odom_text_95: true
+        vel_heat_odom_text_96: true
+        vel_heat_odom_text_97: true
+        vel_heat_odom_text_98: true
+        vel_heat_odom_text_99: true
       Topic:
         Depth: 5
         Durability Policy: Volatile
+        Filter size: 10
         History Policy: Keep Last
         Reliability Policy: Reliable
         Value: /vel_heat_odom_marker
-      Value: false
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 10; 10; 10
@@ -1945,7 +2217,7 @@ Visualization Manager:
   Value: true
   Views:
     Current:
-      Angle: 2.1749980449676514
+      Angle: 2.184997320175171
       Class: rviz_default_plugins/TopDownOrtho
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
@@ -1955,11 +2227,11 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Scale: 11.920937538146973
+      Scale: 13.485281944274902
       Target Frame: viewer
       Value: TopDownOrtho (rviz_default_plugins)
-      X: -0.4641355574131012
-      Y: 0.4106908440589905
+      X: -2.0662972927093506
+      Y: 0.6562261581420898
     Saved:
       - Class: rviz_default_plugins/ThirdPersonFollower
         Distance: 18
@@ -2006,13 +2278,13 @@ Window Geometry:
   Hide Right Dock: false
   InitialPoseButtonPanel:
     collapsed: false
-  QMainWindow State: 000000ff00000000fd000000040000000000000170000005a5fc0200000011fb0000001200530065006c0065006300740069006f006e00000001e10000009b0000005c00fffffffb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c006100790073000000003b000002d4000000c700fffffffc000003150000022d0000000000fffffffaffffffff0100000002fb0000000a0056006900650077007300000000000000033c0000010000fffffffb0000001e0054006f006f006c002000500072006f00700065007200740069006500730000000000ffffffff0000008c00fffffffb00000024004100750074006f00770061007200650053007400610074006500500061006e0065006c01000002850000006e0000000000000000fb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb0000000c00430061006d0065007200610100000682000000eb0000000000000000fb0000000a0049006d0061006700650100000505000002680000000000000000fb0000002c0049006e0069007400690061006c0050006f007300650042007500740074006f006e00500061006e0065006c000000068f000000de0000007100fffffffb0000002c0049006e0069007400690061006c0050006f007300650042007500740074006f006e00500061006e0065006c000000068f000000de0000000000000000fb00000030005200650063006f0067006e006900740069006f006e0052006500730075006c0074004f006e0049006d006100670065000000038a0000010b0000000000000000fb0000002a004100750074006f0077006100720065004400610074006500540069006d006500500061006e0065006c01000002f90000006e0000000000000000fb00000034004100750074006f007700610072006500530063007200650065006e004300610070007400750072006500500061006e0065006c0000000548000000980000005d00fffffffb00000020004d0075006c007400690044006100740061004d006f006e00690074006f007201000002a80000016d0000000000000000000000010000015f000006fffc0200000002fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000e7a0000005afc0100000001fb0000000a00560069006500770073030000004e00000080000002e1000001970000000300000e7a0000005afc0100000002fb0000000800540069006d0065010000000000000e7a0000000000000000fb0000000800540069006d0065010000000000000450000000000000000000000439000005a500000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd000000040000000000000170000005a5fc0200000011fb0000001200530065006c0065006300740069006f006e00000001e10000009b0000005c00fffffffb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c006100790073000000003b000003a8000000c700fffffffc000003e9000001680000000000fffffffaffffffff0100000002fb0000000a0056006900650077007300000000000000033c0000010000fffffffb0000001e0054006f006f006c002000500072006f00700065007200740069006500730000000000ffffffff0000008c00fffffffb00000024004100750074006f00770061007200650053007400610074006500500061006e0065006c01000002850000006e0000000000000000fb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb0000000c00430061006d0065007200610100000682000000eb0000000000000000fb0000000a0049006d0061006700650100000505000002680000000000000000fb0000002c0049006e0069007400690061006c0050006f007300650042007500740074006f006e00500061006e0065006c000000068f000000de0000007100fffffffb0000002c0049006e0069007400690061006c0050006f007300650042007500740074006f006e00500061006e0065006c000000068f000000de0000000000000000fb00000030005200650063006f0067006e006900740069006f006e0052006500730075006c0074004f006e0049006d006100670065000000038a0000010b0000000000000000fb0000002a004100750074006f0077006100720065004400610074006500540069006d006500500061006e0065006c01000002f90000006e0000000000000000fb00000034004100750074006f007700610072006500530063007200650065006e004300610070007400750072006500500061006e0065006c0000000557000000890000005d00fffffffb00000020004d0075006c007400690044006100740061004d006f006e00690074006f007201000002a80000016d0000000000000000000000010000015f000006fffc0200000002fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000e7a0000005afc0100000001fb0000000a00560069006500770073030000004e00000080000002e1000001970000000300000e7a0000005afc0100000002fb0000000800540069006d0065010000000000000e7a0000000000000000fb0000000800540069006d00650100000000000004500000000000000000000004eb000005a500000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Selection:
     collapsed: false
   Tool Properties:
     collapsed: true
   Views:
     collapsed: true
-  Width: 1081
-  X: 1406
+  Width: 1259
+  X: 42
   Y: 32
