@@ -4,7 +4,7 @@
   <arg name="kinematic_state_rate" default="1.0"/>
 
   <group>
-    <node pkg="multi_purpose_mpc_ros" exec="velocity_heat_odom_visualizer" name="velocity_heat_odom_visualizer" output="screen">
+    <node pkg="aic_tools" exec="velocity_heat_odom_visualizer" name="velocity_heat_odom_visualizer" output="screen">
       <remap from="/localization/kinematic_state" to="/localization/kinematic_state_throttle"/>
     </node>
 
