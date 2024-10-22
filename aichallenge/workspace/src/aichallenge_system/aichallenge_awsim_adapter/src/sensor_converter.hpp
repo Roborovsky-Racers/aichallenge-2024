@@ -57,6 +57,8 @@ private:
   int gnss_pose_delay_;
   int gnss_pose_cov_delay_;
 
+  double gnss_buffering_time_ = 0.2;
+
   std::mt19937 generator_;
   std::normal_distribution<double> pose_distribution_;
   std::normal_distribution<double> pose_cov_distribution_;

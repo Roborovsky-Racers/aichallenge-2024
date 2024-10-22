@@ -64,6 +64,34 @@ SensorConverter::SensorConverter(const rclcpp::NodeOptions & node_options)
 
 void SensorConverter::on_gnss_pose(const PoseStamped::ConstSharedPtr msg)
 {
+#if 1
+  const auto process_gnss = [this, msg]() {
+    auto noised_pose = std::make_shared<PoseStamped>(*msg);
+    noised_pose->header.stamp = now();
+    noised_pose->pose.position.x += pose_distribution_(generator_);
+    noised_pose->pose.position.y += pose_distribution_(generator_);
+    noised_pose->pose.position.z += pose_distribution_(generator_);
+    noised_pose->pose.orientation.x += pose_distribution_(generator_);
+    noised_pose->pose.orientation.y += pose_distribution_(generator_);
+    noised_pose->pose.orientation.z += pose_distribution_(generator_);
+    noised_pose->pose.orientation.w += pose_distribution_(generator_);
+    return noised_pose;
+  };
+
+  // If the pose is older than the buffering time, update the pose
+  if (pose_ == nullptr || (now() - pose_->header.stamp).seconds() > gnss_buffering_time_) {
+    pose_ = process_gnss();
+  }
+
+  const auto delayed_publish = [this](PoseStamped pose) {
+    rclcpp::sleep_for(std::chrono::milliseconds(gnss_pose_delay_));
+    pose.header.stamp = now();
+    pub_gnss_pose_->publish(pose);
+  };
+
+  std::thread delayed_publish_thread(std::bind(delayed_publish, *pose_));
+  delayed_publish_thread.detach();
+#else
   auto process_and_publish_gnss = [this, msg]() {
     rclcpp::sleep_for(std::chrono::milliseconds(gnss_pose_delay_));
     
@@ -82,11 +110,39 @@ void SensorConverter::on_gnss_pose(const PoseStamped::ConstSharedPtr msg)
 
   std::thread processing_thread(process_and_publish_gnss);
   processing_thread.detach();
+#endif
 }
-
 
 void SensorConverter::on_gnss_pose_cov(const PoseWithCovarianceStamped::ConstSharedPtr msg)
 {
+#if 1
+  const auto process_gnss_cov = [this, msg]() {
+    auto noised_pose_cov = std::make_shared<PoseWithCovarianceStamped>(*msg);
+    noised_pose_cov->header.stamp = now();
+    noised_pose_cov->pose.pose.position.x += pose_distribution_(generator_);
+    noised_pose_cov->pose.pose.position.y += pose_distribution_(generator_);
+    noised_pose_cov->pose.pose.position.z += pose_distribution_(generator_);
+    noised_pose_cov->pose.pose.orientation.x += pose_distribution_(generator_);
+    noised_pose_cov->pose.pose.orientation.y += pose_distribution_(generator_);
+    noised_pose_cov->pose.pose.orientation.z += pose_distribution_(generator_);
+    noised_pose_cov->pose.pose.orientation.w += pose_distribution_(generator_);
+    return noised_pose_cov;
+  };
+
+  // If the pose is older than the buffering time, update the pose
+  if (pose_cov_ == nullptr || (now() - pose_cov_->header.stamp).seconds() > gnss_buffering_time_) {
+    pose_cov_ = process_gnss_cov();
+  }
+
+  const auto delayed_publish = [this](PoseWithCovarianceStamped pose_cov) {
+    rclcpp::sleep_for(std::chrono::milliseconds(gnss_pose_delay_));
+    pose_cov.header.stamp = now();
+    pub_gnss_pose_cov_->publish(pose_cov);
+  };
+
+  std::thread delayed_publish_thread(std::bind(delayed_publish, *pose_cov_));
+  delayed_publish_thread.detach();
+#else
     auto process_and_publish_gnss_cov = [this, msg]() {
     rclcpp::sleep_for(std::chrono::milliseconds(gnss_pose_cov_delay_));
     
@@ -105,6 +161,7 @@ void SensorConverter::on_gnss_pose_cov(const PoseWithCovarianceStamped::ConstSha
 
   std::thread processing_thread(process_and_publish_gnss_cov);
   processing_thread.detach();
+#endif
 }
 
 void SensorConverter::on_imu(const Imu::ConstSharedPtr msg)
