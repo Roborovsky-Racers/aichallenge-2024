@@ -1,5 +1,6 @@
 /**:
   ros__parameters:
+    gnss_value_uptate_period: 0.2  # [s]
     # gnss_pose_delay: 500  # [ms]
     # gnss_pose_cov_delay: 500  # [ms]
     gnss_pose_delay: 300  # [ms]

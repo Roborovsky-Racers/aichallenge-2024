@@ -20,6 +20,7 @@ SensorConverter::SensorConverter(const rclcpp::NodeOptions & node_options)
   using std::placeholders::_1;
 
   // Parameters
+  gnss_value_uptate_period_ = declare_parameter<double>("gnss_value_uptate_period");
   gnss_pose_delay_ = declare_parameter<int>("gnss_pose_delay");
   gnss_pose_cov_delay_ = declare_parameter<int>("gnss_pose_cov_delay");
   gnss_pose_mean_ = declare_parameter<double>("gnss_pose_mean");
@@ -79,8 +80,8 @@ void SensorConverter::on_gnss_pose(const PoseStamped::ConstSharedPtr msg)
     return noised_pose;
   };
 
-  // If the pose is older than the buffering time, update the pose
-  if (pose_ == nullptr || (now() - pose_->header.stamp).seconds() > gnss_buffering_time_) {
+  // If the pose is older than the value update period, update the pose
+  if (pose_ == nullptr || (now() - pose_->header.stamp).seconds() >= gnss_value_uptate_period_) {
     pose_ = process_gnss();
   }
 
@@ -130,8 +131,8 @@ void SensorConverter::on_gnss_pose_cov(const PoseWithCovarianceStamped::ConstSha
     return noised_pose_cov;
   };
 
-  // If the pose is older than the buffering time, update the pose
-  if (pose_cov_ == nullptr || (now() - pose_cov_->header.stamp).seconds() > gnss_buffering_time_) {
+  // If the pose is older than the value update period, update the pose
+  if (pose_cov_ == nullptr || (now() - pose_cov_->header.stamp).seconds() >= gnss_value_uptate_period_) {
     pose_cov_ = process_gnss_cov();
   }
 
