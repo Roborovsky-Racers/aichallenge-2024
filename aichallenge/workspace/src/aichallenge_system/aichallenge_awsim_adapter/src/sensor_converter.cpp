@@ -34,6 +34,7 @@ SensorConverter::SensorConverter(const rclcpp::NodeOptions & node_options)
   imu_ori_stddev_ = declare_parameter<double>("imu_ori_stddev");
   steering_angle_mean_ = declare_parameter<double>("steering_angle_mean");
   steering_angle_stddev_ = declare_parameter<double>("steering_angle_stddev");
+  steering_tire_angle_gain_var_ = declare_parameter<double>("steering_tire_angle_gain_var");
 
 
   // Subscriptions
@@ -135,7 +136,7 @@ void SensorConverter::on_gnss_pose_cov(const PoseWithCovarianceStamped::ConstSha
   }
 
   const auto delayed_publish = [this](PoseWithCovarianceStamped pose_cov) {
-    rclcpp::sleep_for(std::chrono::milliseconds(gnss_pose_delay_));
+    rclcpp::sleep_for(std::chrono::milliseconds(gnss_pose_cov_delay_));
     pose_cov.header.stamp = now();
     pub_gnss_pose_cov_->publish(pose_cov);
   };
@@ -183,6 +184,10 @@ void SensorConverter::on_imu(const Imu::ConstSharedPtr msg)
 void SensorConverter::on_steering_report(const SteeringReport::ConstSharedPtr msg)
 {
   steering_report_ = std::make_shared<SteeringReport>(*msg);
+
+  // 実機の挙動に合わせて、実際のステア角に対してgainを掛けた値を steer status として出力する
+  steering_report_->steering_tire_angle *= steering_tire_angle_gain_var_;
+
   steering_report_->steering_tire_angle += steering_angle_distribution_(generator_);
   pub_steering_report_->publish(*steering_report_);
 }

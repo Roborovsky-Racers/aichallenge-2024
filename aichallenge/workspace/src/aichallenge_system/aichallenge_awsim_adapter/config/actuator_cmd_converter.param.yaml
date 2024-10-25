@@ -1,0 +1,11 @@
+/**:
+  ros__parameters:
+    accel_delay_sec: 0.1    # [s]
+    # steer_delay_sec: 0.2 # [s]
+    steer_delay_sec: 0.11   # [s]
+    accel_limit: 0.7        # [m/s^2]
+    brake_limit: -5.0       # [m/s^2]
+    steer_limit: 0.5585     # [rad] (0.5585 rad = 32 deg)
+    steer_rate_limit: 0.35  # [rad/s]
+
+    steering_tire_angle_gain_var: 1.639

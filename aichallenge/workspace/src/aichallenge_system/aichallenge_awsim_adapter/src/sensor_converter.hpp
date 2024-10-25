@@ -78,6 +78,7 @@ private:
   double imu_ori_stddev_;
   double steering_angle_mean_;
   double steering_angle_stddev_;
+  double steering_tire_angle_gain_var_;
 };
 
 #endif  // AUTOWARE_EXTERNAL_CMD_CONVERTER__NODE_HPP_

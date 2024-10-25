@@ -22,14 +22,18 @@ ActuationCmdConverter::ActuationCmdConverter(const rclcpp::NodeOptions & node_op
   // Parameters
   const std::string csv_path_accel_map = declare_parameter<std::string>("csv_path_accel_map");
   const std::string csv_path_brake_map = declare_parameter<std::string>("csv_path_brake_map");
+
   accel_limit_ = this->declare_parameter<double>("accel_limit");
   brake_limit_ = this->declare_parameter<double>("brake_limit");
   steer_limit_ = this->declare_parameter<double>("steer_limit");
   steer_rate_limit_ = this->declare_parameter<double>("steer_rate_limit");
   steer_delay_sec_ = this->declare_parameter<double>("steer_delay_sec");
   accel_delay_sec_ = this->declare_parameter<double>("accel_delay_sec");
+  steering_tire_angle_gain_var_ = this->declare_parameter<double>("steering_tire_angle_gain_var");
+
   accel_delay_ = std::chrono::duration<double>(accel_delay_sec_);
   steer_delay_ = std::chrono::duration<double>(steer_delay_sec_);
+
   // Subscriptions
   sub_actuation_ = create_subscription<ActuationCommandStamped>(
     "/control/command/actuation_cmd", 1, std::bind(&ActuationCmdConverter::on_actuation_cmd, this, _1));
@@ -131,7 +135,12 @@ void ActuationCmdConverter::on_actuation_cmd(const ActuationCommandStamped::Cons
 
   // Publish ControlCommand
   const auto output = create_ackermann_command(delayed_accel_cmd, delayed_steer_cmd);
-  pub_ackermann_->publish(output);
+
+  // 実機の挙動を模すために、指定ステアリング角度をgainで除して出力する
+  // （steer_rate_limit は gainで除す前の値に対して適用されることに注意！）
+  auto scaled_output = output;
+  scaled_output.lateral.steering_tire_angle /= steering_tire_angle_gain_var_;
+  pub_ackermann_->publish(scaled_output);
 
   // store last ackermann command
   last_ackermann_cmd_ = output;
