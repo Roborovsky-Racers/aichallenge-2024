@@ -2,6 +2,10 @@
 <launch>
   <arg name="csv_path_accel_map" default="$(find-pkg-share aichallenge_submit_launch)/data/accel_map.csv"/>
   <arg name="csv_path_brake_map" default="$(find-pkg-share aichallenge_submit_launch)/data/brake_map.csv"/>
+  <arg name="gnss_pose_throttle_rate" default="20.0"/>
+
+  <node pkg="topic_tools" exec="throttle" name="gnss_pose_throttle" output="screen" args="messages /awsim/gnss/pose $(var gnss_pose_throttle_rate) /awsim/gnss/pose_throttle"/>
+  <node pkg="topic_tools" exec="throttle" name="gnss_pose_with_covariance_throttle" output="screen" args="messages /awsim/gnss/pose_with_covariance $(var gnss_pose_throttle_rate) /awsim/gnss/pose_with_covariance_throttle"/>
 
   <node pkg="aichallenge_awsim_adapter" exec="actuation_cmd_converter">
     <param from="$(find-pkg-share aichallenge_awsim_adapter)/config/actuator_cmd_converter.param.yaml" />
@@ -10,5 +14,7 @@
   </node>
   <node pkg="aichallenge_awsim_adapter" exec="sensor_converter">
     <param from="$(find-pkg-share aichallenge_awsim_adapter)/config/sensor_converter.param.yaml" />
+    <remap from="/awsim/gnss/pose" to="/awsim/gnss/pose_throttle"/>
+    <remap from="/awsim/gnss/pose_with_covariance" to="/awsim/gnss/pose_with_covariance_throttle"/>
   </node>
 </launch>
