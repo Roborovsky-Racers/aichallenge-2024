@@ -57,7 +57,7 @@ SensorConverter::SensorConverter(const rclcpp::NodeOptions & node_options)
   std::random_device rd;
   generator_ = std::mt19937(rd());
   pose_distribution_ = std::normal_distribution<double>(gnss_pose_mean_, gnss_pose_stddev_);
-  pose_cov_distribution_ = std::normal_distribution<double>(gnss_pose_mean_, gnss_pose_stddev_);
+  pose_cov_distribution_ = std::normal_distribution<double>(gnss_pose_mean_, gnss_pose_cov_stddev_);
   imu_acc_distribution_ = std::normal_distribution<double>(imu_acc_mean_, imu_acc_stddev_);
   imu_ang_distribution_ = std::normal_distribution<double>(imu_ang_mean_, imu_ang_stddev_);
   imu_ori_distribution_ = std::normal_distribution<double>(imu_ori_mean_, imu_ori_stddev_);
@@ -121,13 +121,13 @@ void SensorConverter::on_gnss_pose_cov(const PoseWithCovarianceStamped::ConstSha
   const auto process_gnss_cov = [this, msg]() {
     auto noised_pose_cov = std::make_shared<PoseWithCovarianceStamped>(*msg);
     noised_pose_cov->header.stamp = now();
-    noised_pose_cov->pose.pose.position.x += pose_distribution_(generator_);
-    noised_pose_cov->pose.pose.position.y += pose_distribution_(generator_);
-    noised_pose_cov->pose.pose.position.z += pose_distribution_(generator_);
-    noised_pose_cov->pose.pose.orientation.x += pose_distribution_(generator_);
-    noised_pose_cov->pose.pose.orientation.y += pose_distribution_(generator_);
-    noised_pose_cov->pose.pose.orientation.z += pose_distribution_(generator_);
-    noised_pose_cov->pose.pose.orientation.w += pose_distribution_(generator_);
+    noised_pose_cov->pose.pose.position.x += pose_cov_distribution_(generator_);
+    noised_pose_cov->pose.pose.position.y += pose_cov_distribution_(generator_);
+    noised_pose_cov->pose.pose.position.z += pose_cov_distribution_(generator_);
+    noised_pose_cov->pose.pose.orientation.x += pose_cov_distribution_(generator_);
+    noised_pose_cov->pose.pose.orientation.y += pose_cov_distribution_(generator_);
+    noised_pose_cov->pose.pose.orientation.z += pose_cov_distribution_(generator_);
+    noised_pose_cov->pose.pose.orientation.w += pose_cov_distribution_(generator_);
     return noised_pose_cov;
   };
 
