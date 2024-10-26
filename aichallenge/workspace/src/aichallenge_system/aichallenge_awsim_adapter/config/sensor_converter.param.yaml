@@ -1,16 +1,16 @@
 /**:
   ros__parameters:
     gnss_value_uptate_period: 0.2  # [s]
-    # gnss_pose_delay: 500  # [ms]
-    # gnss_pose_cov_delay: 500  # [ms]
-    gnss_pose_delay: 300  # [ms]
-    gnss_pose_cov_delay: 300  # [ms]
+    gnss_pose_delay: 500  # [ms]
+    gnss_pose_cov_delay: 500  # [ms]
+    # gnss_pose_delay: 300  # [ms]
+    # gnss_pose_cov_delay: 300  # [ms]
     gnss_pose_mean: 0.0
 #    gnss_pose_stddev: 0.005
-    gnss_pose_stddev: 0.000
+    gnss_pose_stddev: 0.015
     gnss_pose_cov_mean: 0.0
     # gnss_pose_cov_stddev: 0.007
-    gnss_pose_cov_stddev: 0.000
+    gnss_pose_cov_stddev: 0.015
 
     imu_acc_mean: 0.0
     imu_acc_stddev: 0.001
@@ -23,3 +23,4 @@
     steering_angle_stddev: 0.0000075
 
     steering_tire_angle_gain_var: 1.639
+    # steering_tire_angle_gain_var: 1.0
