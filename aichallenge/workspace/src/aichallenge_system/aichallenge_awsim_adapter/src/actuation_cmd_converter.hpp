@@ -68,6 +68,7 @@ private:
     const rclcpp::Time& current_time,
     const std::chrono::duration<double>& delay);
   double accel_delay_sec_, steer_delay_sec_;
+  double steering_tire_angle_gain_var_;
 
   // limits
   double accel_limit_, brake_limit_, steer_limit_, steer_rate_limit_;
