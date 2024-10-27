@@ -63,7 +63,14 @@
       <arg name="output_twist_with_covariance_raw_topic" value="/localization/twist_estimator/twist_with_covariance_raw"/>
     </include>
 
-    <node pkg="imu_gnss_poser" exec="imu_gnss_poser_node" name="imu_gnss_poser" output="screen"/>
+    <node pkg="aic_tools" exec="gnss_filter" name="gnss_filter" output="both">
+      <param from="$(find-pkg-share aic_tools)/config/gnss_filter.param.yaml"/>
+      <param name="gnss_delay_sec" value="$(var pose_additional_delay_var)"/>
+    </node>
+
+    <node pkg="imu_gnss_poser" exec="imu_gnss_poser_node" name="imu_gnss_poser" output="screen">
+      <remap from="/sensing/gnss/pose_with_covariance" to="/sensing/gnss/pose_with_covariance_filtered"/>
+    </node>
 
     <include file="$(find-pkg-share ekf_localizer)/launch/ekf_localizer.launch.xml">
       <arg name="enable_yaw_bias_estimation" value="false"/>
