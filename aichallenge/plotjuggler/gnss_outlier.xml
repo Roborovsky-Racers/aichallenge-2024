@@ -3,24 +3,27 @@
  <tabbed_widget name="Main Window" parent="main_window">
   <Tab tab_name="tab1" containers="1">
    <Container>
-    <DockSplitter count="2" orientation="-" sizes="0.5;0.5">
+    <DockSplitter orientation="-" sizes="1" count="1">
      <DockArea name="...">
-      <plot style="Lines" flip_x="false" mode="TimeSeries" flip_y="false">
-       <range top="2.373094" bottom="-0.522556" left="1.120780" right="14.822405"/>
+      <plot flip_x="false" style="LinesAndDots" flip_y="false" mode="XYPlot">
+       <range top="43175.908182" left="89611.525434" right="89681.660321" bottom="43115.934884"/>
        <limitY/>
-       <curve name="/localization/acceleration/accel/accel/linear/x" color="#d62728"/>
-       <curve name="/control/command/control_cmd/longitudinal/acceleration" color="#1ac938"/>
-       <curve name="/control/command/actuation_cmd/actuation/accel_cmd" color="#1f77b4"/>
-       <curve name="minus_brake_cmd" color="#e544ff"/>
-       <curve name="/awsim/control_cmd/longitudinal/acceleration" color="#37ff95"/>
+       <curve name="/sensing/gnss/pose_with_covariance/pose/pose/position/[x;y]" color="#1f77b4" curve_y="/sensing/gnss/pose_with_covariance/pose/pose/position/y" curve_x="/sensing/gnss/pose_with_covariance/pose/pose/position/x"/>
+       <curve name="/localization/kinematic_state/pose/pose/position/[x;y]" color="#9467bd" curve_y="/localization/kinematic_state/pose/pose/position/y" curve_x="/localization/kinematic_state/pose/pose/position/x"/>
+       <curve name="/awsim/gnss/pose_with_covariance/pose/pose/position/[x;y]" color="#bcbd22" curve_y="/awsim/gnss/pose_with_covariance/pose/pose/position/y" curve_x="/awsim/gnss/pose_with_covariance/pose/pose/position/x"/>
       </plot>
      </DockArea>
+    </DockSplitter>
+   </Container>
+  </Tab>
+  <Tab tab_name="tab3" containers="1">
+   <Container>
+    <DockSplitter orientation="-" sizes="1" count="1">
      <DockArea name="...">
-      <plot style="Lines" flip_x="false" mode="TimeSeries" flip_y="false">
-       <range top="0.109678" bottom="-0.260169" left="1.120780" right="14.822405"/>
+      <plot flip_x="false" style="Lines" flip_y="false" mode="TimeSeries">
+       <range top="0.298013" left="0.000000" right="21.599616" bottom="0.006161"/>
        <limitY/>
-       <curve name="/vehicle/status/steering_status/steering_tire_angle" color="#b41f28"/>
-       <curve name="/control/command/control_cmd/lateral/steering_tire_angle" color="#ff7f0e"/>
+       <curve name="/localization/gnss_filter/distance_from_ekf/data" color="#17becf"/>
       </plot>
      </DockArea>
     </DockSplitter>
@@ -42,7 +45,7 @@
    <max_array_size value="100"/>
    <boolean_strings_to_number value="true"/>
    <remove_suffix_from_strings value="true"/>
-   <selected_topics value="/control/command/actuation_cmd;/control/command/control_cmd;/localization/acceleration;/localization/gyro_twist;/localization/gyro_twist_raw;/localization/kinematic_state;/localization/pose;/localization/pose_with_covariance;/localization/twist;/sensing/gnss/pose;/sensing/gnss/pose_with_covariance;/sensing/imu/imu_data;/sensing/imu/imu_raw;/sensing/vehicle_velocity_converter/twist_with_covariance;/vehicle/raw_vehicle_cmd_converter/debug/steer_pid;/vehicle/status/control_mode;/vehicle/status/gear_status;/vehicle/status/steering_status;/vehicle/status/velocity_status;/awsim/control_cmd"/>
+   <selected_topics value="/control/command/actuation_cmd;/control/command/control_cmd;/localization/acceleration;/localization/gyro_twist;/localization/gyro_twist_raw;/localization/kinematic_state;/localization/pose;/localization/pose_with_covariance;/localization/twist;/sensing/gnss/pose;/sensing/gnss/pose_with_covariance;/sensing/imu/imu_data;/sensing/imu/imu_raw;/sensing/vehicle_velocity_converter/twist_with_covariance;/vehicle/raw_vehicle_cmd_converter/debug/steer_pid;/vehicle/status/control_mode;/vehicle/status/gear_status;/vehicle/status/steering_status;/vehicle/status/velocity_status"/>
   </plugin>
   <plugin ID="DataLoad ULog"/>
   <plugin ID="ROS2 Topic Subscriber">
@@ -51,7 +54,7 @@
    <max_array_size value="100"/>
    <boolean_strings_to_number value="true"/>
    <remove_suffix_from_strings value="true"/>
-   <selected_topics value="/awsim/control_cmd;/control/command/actuation_cmd;/control/command/control_cmd_raw;/localization/kinematic_state;/tf;/vehicle/status/gear_status;/vehicle/status/steering_status;/vehicle/status/velocity_status;/control/command/control_cmd"/>
+   <selected_topics value="/awsim/control_cmd;/awsim/gnss/pose_with_covariance;/control/command/actuation_cmd;/control/command/control_cmd;/localization/acceleration;/localization/kinematic_state;/sensing/gnss/pose_with_covariance;/sensing/gnss/pose_with_covariance_filtered;/tf;/vehicle/status/gear_status;/vehicle/status/steering_status;/vehicle/status/velocity_status;/localization/gnss_filter/distance_from_ekf"/>
   </plugin>
   <plugin ID="UDP Server"/>
   <plugin ID="WebSocket Server"/>
@@ -67,25 +70,20 @@
  </Plugins>
  <!-- - - - - - - - - - - - - - - -->
  <previouslyLoaded_Datafiles>
-  <fileInfo filename="../../logs/20241011_training/awsim_log/accel_map/acc1.0_brake2.5/rosbag2_2024_10_26-15_48_17/metadata.yaml" prefix="">
+  <fileInfo prefix="" filename="../../logs/20241011_training/rosbag_trim/rosbag2_2024_10_11-18_03_34_trim_12/metadata.yaml">
    <plugin ID="DataLoad ROS2 bags">
     <use_header_stamp value="false"/>
     <discard_large_arrays value="true"/>
     <max_array_size value="100"/>
     <boolean_strings_to_number value="true"/>
     <remove_suffix_from_strings value="true"/>
-    <selected_topics value="/control/command/actuation_cmd;/control/command/control_cmd;/localization/acceleration;/localization/gyro_twist;/localization/gyro_twist_raw;/localization/kinematic_state;/localization/pose;/localization/pose_with_covariance;/localization/twist;/sensing/gnss/pose;/sensing/gnss/pose_with_covariance;/sensing/imu/imu_data;/sensing/imu/imu_raw;/sensing/vehicle_velocity_converter/twist_with_covariance;/vehicle/raw_vehicle_cmd_converter/debug/steer_pid;/vehicle/status/control_mode;/vehicle/status/gear_status;/vehicle/status/steering_status;/vehicle/status/velocity_status;/awsim/control_cmd"/>
+    <selected_topics value="/control/command/actuation_cmd;/control/command/control_cmd;/localization/acceleration;/localization/gyro_twist;/localization/gyro_twist_raw;/localization/kinematic_state;/localization/pose;/localization/pose_with_covariance;/localization/twist;/sensing/gnss/pose;/sensing/gnss/pose_with_covariance;/sensing/imu/imu_data;/sensing/imu/imu_raw;/sensing/vehicle_velocity_converter/twist_with_covariance;/vehicle/raw_vehicle_cmd_converter/debug/steer_pid;/vehicle/status/control_mode;/vehicle/status/gear_status;/vehicle/status/steering_status;/vehicle/status/velocity_status"/>
    </plugin>
   </fileInfo>
  </previouslyLoaded_Datafiles>
+ <previouslyLoaded_Streamer name="ROS2 Topic Subscriber"/>
  <!-- - - - - - - - - - - - - - - -->
- <customMathEquations>
-  <snippet name="minus_brake_cmd">
-   <global></global>
-   <function>return -value</function>
-   <linked_source>/control/command/actuation_cmd/actuation/brake_cmd</linked_source>
-  </snippet>
- </customMathEquations>
+ <customMathEquations/>
  <snippets/>
  <!-- - - - - - - - - - - - - - - -->
 </root>

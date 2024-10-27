@@ -14,12 +14,29 @@
 
 #include "sensor_converter.hpp"
 
+// namespace {
+// void normalize_quaternion(geometry_msgs::msg::Quaternion & q)
+// {
+//   const double norm = sqrt(
+//     q.x * q.x +
+//     q.y * q.y +
+//     q.z * q.z +
+//     q.w * q.w);
+
+//   q.x /= norm;
+//   q.y /= norm;
+//   q.z /= norm;
+//   q.w /= norm;
+// }
+// }
+
 SensorConverter::SensorConverter(const rclcpp::NodeOptions & node_options)
 : Node("sensor_converter", node_options)
 {
   using std::placeholders::_1;
 
   // Parameters
+  gnss_value_uptate_period_ = declare_parameter<double>("gnss_value_uptate_period");
   gnss_pose_delay_ = declare_parameter<int>("gnss_pose_delay");
   gnss_pose_cov_delay_ = declare_parameter<int>("gnss_pose_cov_delay");
   gnss_pose_mean_ = declare_parameter<double>("gnss_pose_mean");
@@ -34,9 +51,12 @@ SensorConverter::SensorConverter(const rclcpp::NodeOptions & node_options)
   imu_ori_stddev_ = declare_parameter<double>("imu_ori_stddev");
   steering_angle_mean_ = declare_parameter<double>("steering_angle_mean");
   steering_angle_stddev_ = declare_parameter<double>("steering_angle_stddev");
+  steering_tire_angle_gain_var_ = declare_parameter<double>("steering_tire_angle_gain_var");
 
 
   // Subscriptions
+  sub_outlier_gnss_pose_ = create_subscription<PoseStamped>(
+    "~/outlier_gnss_pose", 1, std::bind(&SensorConverter::on_outlier_gnss_pose, this, _1));
   sub_gnss_pose_ = create_subscription<PoseStamped>(
     "/awsim/gnss/pose", 1, std::bind(&SensorConverter::on_gnss_pose, this, _1));
   sub_gnss_pose_cov_ = create_subscription<PoseWithCovarianceStamped>(
@@ -55,15 +75,48 @@ SensorConverter::SensorConverter(const rclcpp::NodeOptions & node_options)
   std::random_device rd;
   generator_ = std::mt19937(rd());
   pose_distribution_ = std::normal_distribution<double>(gnss_pose_mean_, gnss_pose_stddev_);
-  pose_cov_distribution_ = std::normal_distribution<double>(gnss_pose_mean_, gnss_pose_stddev_);
+  pose_cov_distribution_ = std::normal_distribution<double>(gnss_pose_cov_mean_, gnss_pose_cov_stddev_);
   imu_acc_distribution_ = std::normal_distribution<double>(imu_acc_mean_, imu_acc_stddev_);
   imu_ang_distribution_ = std::normal_distribution<double>(imu_ang_mean_, imu_ang_stddev_);
   imu_ori_distribution_ = std::normal_distribution<double>(imu_ori_mean_, imu_ori_stddev_);
   steering_angle_distribution_ = std::normal_distribution<double>(steering_angle_mean_, steering_angle_stddev_);
 }
 
+void SensorConverter::on_outlier_gnss_pose(const PoseStamped::ConstSharedPtr msg) {
+  outlier_gnss_pose_ = *msg;
+}
+
 void SensorConverter::on_gnss_pose(const PoseStamped::ConstSharedPtr msg)
 {
+#if 1
+  const auto process_gnss = [this, msg]() {
+    auto noised_pose = std::make_shared<PoseStamped>(*msg);
+    noised_pose->header.stamp = now();
+    noised_pose->pose.position.x += pose_distribution_(generator_);
+    noised_pose->pose.position.y += pose_distribution_(generator_);
+    noised_pose->pose.position.z += pose_distribution_(generator_);
+    noised_pose->pose.orientation.x += pose_distribution_(generator_);
+    noised_pose->pose.orientation.y += pose_distribution_(generator_);
+    noised_pose->pose.orientation.z += pose_distribution_(generator_);
+    noised_pose->pose.orientation.w += pose_distribution_(generator_);
+    // normalize_quaternion(noised_pose->pose.orientation);
+    return noised_pose;
+  };
+
+  // If the pose is older than the value update period, update the pose
+  if (pose_ == nullptr || (now() - pose_->header.stamp).seconds() >= gnss_value_uptate_period_) {
+    pose_ = process_gnss();
+  }
+
+  const auto delayed_publish = [this](PoseStamped pose) {
+    rclcpp::sleep_for(std::chrono::milliseconds(gnss_pose_delay_));
+    pose.header.stamp = now();
+    pub_gnss_pose_->publish(pose);
+  };
+
+  std::thread delayed_publish_thread(std::bind(delayed_publish, *pose_));
+  delayed_publish_thread.detach();
+#else
   auto process_and_publish_gnss = [this, msg]() {
     rclcpp::sleep_for(std::chrono::milliseconds(gnss_pose_delay_));
     
@@ -82,11 +135,49 @@ void SensorConverter::on_gnss_pose(const PoseStamped::ConstSharedPtr msg)
 
   std::thread processing_thread(process_and_publish_gnss);
   processing_thread.detach();
+#endif
 }
-
 
 void SensorConverter::on_gnss_pose_cov(const PoseWithCovarianceStamped::ConstSharedPtr msg)
 {
+#if 1
+  const auto process_gnss_cov = [this, msg]() {
+    auto noised_pose_cov = std::make_shared<PoseWithCovarianceStamped>(*msg);
+    noised_pose_cov->header.stamp = now();
+    noised_pose_cov->pose.pose.position.x += pose_cov_distribution_(generator_);
+    noised_pose_cov->pose.pose.position.y += pose_cov_distribution_(generator_);
+    noised_pose_cov->pose.pose.position.z += pose_cov_distribution_(generator_);
+    noised_pose_cov->pose.pose.orientation.x += pose_cov_distribution_(generator_);
+    noised_pose_cov->pose.pose.orientation.y += pose_cov_distribution_(generator_);
+    noised_pose_cov->pose.pose.orientation.z += pose_cov_distribution_(generator_);
+    noised_pose_cov->pose.pose.orientation.w += pose_cov_distribution_(generator_);
+    // normalize_quaternion(noised_pose_cov->pose.pose.orientation);
+
+    if(outlier_gnss_pose_.has_value()) {
+      noised_pose_cov->pose.pose.position.x += outlier_gnss_pose_->pose.position.x;
+      noised_pose_cov->pose.pose.position.y += outlier_gnss_pose_->pose.position.y;
+      outlier_gnss_pose_ = std::nullopt;
+      RCLCPP_WARN(get_logger(), "Outlier GNSS pose detected! x: %f, y: %f",
+                  outlier_gnss_pose_->pose.position.x, outlier_gnss_pose_->pose.position.y);
+    }
+
+    return noised_pose_cov;
+  };
+
+  // If the pose is older than the value update period, update the pose
+  if (pose_cov_ == nullptr || (now() - pose_cov_->header.stamp).seconds() >= gnss_value_uptate_period_) {
+    pose_cov_ = process_gnss_cov();
+  } 
+
+  const auto delayed_publish = [this](PoseWithCovarianceStamped pose_cov) {
+    rclcpp::sleep_for(std::chrono::milliseconds(gnss_pose_cov_delay_));
+    pose_cov.header.stamp = now();
+    pub_gnss_pose_cov_->publish(pose_cov);
+  };
+
+  std::thread delayed_publish_thread(std::bind(delayed_publish, *pose_cov_));
+  delayed_publish_thread.detach();
+#else
     auto process_and_publish_gnss_cov = [this, msg]() {
     rclcpp::sleep_for(std::chrono::milliseconds(gnss_pose_cov_delay_));
     
@@ -105,6 +196,7 @@ void SensorConverter::on_gnss_pose_cov(const PoseWithCovarianceStamped::ConstSha
 
   std::thread processing_thread(process_and_publish_gnss_cov);
   processing_thread.detach();
+#endif
 }
 
 void SensorConverter::on_imu(const Imu::ConstSharedPtr msg)
@@ -126,6 +218,10 @@ void SensorConverter::on_imu(const Imu::ConstSharedPtr msg)
 void SensorConverter::on_steering_report(const SteeringReport::ConstSharedPtr msg)
 {
   steering_report_ = std::make_shared<SteeringReport>(*msg);
+
+  // 実機の挙動に合わせて、実際のステア角に対してgainを掛けた値を steer status として出力する
+  steering_report_->steering_tire_angle *= steering_tire_angle_gain_var_;
+
   steering_report_->steering_tire_angle += steering_angle_distribution_(generator_);
   pub_steering_report_->publish(*steering_report_);
 }

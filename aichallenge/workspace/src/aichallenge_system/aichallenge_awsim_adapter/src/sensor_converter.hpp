@@ -35,6 +35,7 @@ public:
   explicit SensorConverter(const rclcpp::NodeOptions & node_options);
 
 private:
+  rclcpp::Subscription<PoseStamped>::SharedPtr sub_outlier_gnss_pose_;
   rclcpp::Subscription<PoseStamped>::SharedPtr sub_gnss_pose_;
   rclcpp::Subscription<PoseWithCovarianceStamped>::SharedPtr sub_gnss_pose_cov_;
   rclcpp::Subscription<Imu>::SharedPtr sub_imu_;
@@ -45,11 +46,13 @@ private:
   rclcpp::Publisher<SteeringReport>::SharedPtr pub_steering_report_;
 
 
+  void on_outlier_gnss_pose(const PoseStamped::ConstSharedPtr msg);
   void on_gnss_pose(const PoseStamped::ConstSharedPtr msg);
   void on_gnss_pose_cov(const PoseWithCovarianceStamped::ConstSharedPtr msg);
   void on_imu(const Imu::ConstSharedPtr msg);
   void on_steering_report(const SteeringReport::ConstSharedPtr msg);
 
+  std::optional<PoseStamped> outlier_gnss_pose_;
   PoseStamped::SharedPtr pose_;
   PoseWithCovarianceStamped::SharedPtr pose_cov_;
   Imu::SharedPtr imu_;
@@ -64,6 +67,7 @@ private:
   std::normal_distribution<double> imu_ang_distribution_;
   std::normal_distribution<double> imu_ori_distribution_;
   std::normal_distribution<double> steering_angle_distribution_;
+  double gnss_value_uptate_period_;
   double gnss_pose_mean_;
   double gnss_pose_stddev_;
   double gnss_pose_cov_mean_;
@@ -76,6 +80,7 @@ private:
   double imu_ori_stddev_;
   double steering_angle_mean_;
   double steering_angle_stddev_;
+  double steering_tire_angle_gain_var_;
 };
 
 #endif  // AUTOWARE_EXTERNAL_CMD_CONVERTER__NODE_HPP_
