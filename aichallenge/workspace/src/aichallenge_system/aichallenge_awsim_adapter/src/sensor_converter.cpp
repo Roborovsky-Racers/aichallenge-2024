@@ -14,6 +14,22 @@
 
 #include "sensor_converter.hpp"
 
+// namespace {
+// void normalize_quaternion(geometry_msgs::msg::Quaternion & q)
+// {
+//   const double norm = sqrt(
+//     q.x * q.x +
+//     q.y * q.y +
+//     q.z * q.z +
+//     q.w * q.w);
+
+//   q.x /= norm;
+//   q.y /= norm;
+//   q.z /= norm;
+//   q.w /= norm;
+// }
+// }
+
 SensorConverter::SensorConverter(const rclcpp::NodeOptions & node_options)
 : Node("sensor_converter", node_options)
 {
@@ -39,6 +55,8 @@ SensorConverter::SensorConverter(const rclcpp::NodeOptions & node_options)
 
 
   // Subscriptions
+  sub_outlier_gnss_pose_ = create_subscription<PoseStamped>(
+    "~/outlier_gnss_pose", 1, std::bind(&SensorConverter::on_outlier_gnss_pose, this, _1));
   sub_gnss_pose_ = create_subscription<PoseStamped>(
     "/awsim/gnss/pose", 1, std::bind(&SensorConverter::on_gnss_pose, this, _1));
   sub_gnss_pose_cov_ = create_subscription<PoseWithCovarianceStamped>(
@@ -57,11 +75,15 @@ SensorConverter::SensorConverter(const rclcpp::NodeOptions & node_options)
   std::random_device rd;
   generator_ = std::mt19937(rd());
   pose_distribution_ = std::normal_distribution<double>(gnss_pose_mean_, gnss_pose_stddev_);
-  pose_cov_distribution_ = std::normal_distribution<double>(gnss_pose_mean_, gnss_pose_cov_stddev_);
+  pose_cov_distribution_ = std::normal_distribution<double>(gnss_pose_cov_mean_, gnss_pose_cov_stddev_);
   imu_acc_distribution_ = std::normal_distribution<double>(imu_acc_mean_, imu_acc_stddev_);
   imu_ang_distribution_ = std::normal_distribution<double>(imu_ang_mean_, imu_ang_stddev_);
   imu_ori_distribution_ = std::normal_distribution<double>(imu_ori_mean_, imu_ori_stddev_);
   steering_angle_distribution_ = std::normal_distribution<double>(steering_angle_mean_, steering_angle_stddev_);
+}
+
+void SensorConverter::on_outlier_gnss_pose(const PoseStamped::ConstSharedPtr msg) {
+  outlier_gnss_pose_ = *msg;
 }
 
 void SensorConverter::on_gnss_pose(const PoseStamped::ConstSharedPtr msg)
@@ -77,6 +99,7 @@ void SensorConverter::on_gnss_pose(const PoseStamped::ConstSharedPtr msg)
     noised_pose->pose.orientation.y += pose_distribution_(generator_);
     noised_pose->pose.orientation.z += pose_distribution_(generator_);
     noised_pose->pose.orientation.w += pose_distribution_(generator_);
+    // normalize_quaternion(noised_pose->pose.orientation);
     return noised_pose;
   };
 
@@ -128,13 +151,23 @@ void SensorConverter::on_gnss_pose_cov(const PoseWithCovarianceStamped::ConstSha
     noised_pose_cov->pose.pose.orientation.y += pose_cov_distribution_(generator_);
     noised_pose_cov->pose.pose.orientation.z += pose_cov_distribution_(generator_);
     noised_pose_cov->pose.pose.orientation.w += pose_cov_distribution_(generator_);
+    // normalize_quaternion(noised_pose_cov->pose.pose.orientation);
+
+    if(outlier_gnss_pose_.has_value()) {
+      noised_pose_cov->pose.pose.position.x += outlier_gnss_pose_->pose.position.x;
+      noised_pose_cov->pose.pose.position.y += outlier_gnss_pose_->pose.position.y;
+      outlier_gnss_pose_ = std::nullopt;
+      RCLCPP_WARN(get_logger(), "Outlier GNSS pose detected! x: %f, y: %f",
+                  outlier_gnss_pose_->pose.position.x, outlier_gnss_pose_->pose.position.y);
+    }
+
     return noised_pose_cov;
   };
 
   // If the pose is older than the value update period, update the pose
   if (pose_cov_ == nullptr || (now() - pose_cov_->header.stamp).seconds() >= gnss_value_uptate_period_) {
     pose_cov_ = process_gnss_cov();
-  }
+  } 
 
   const auto delayed_publish = [this](PoseWithCovarianceStamped pose_cov) {
     rclcpp::sleep_for(std::chrono::milliseconds(gnss_pose_cov_delay_));

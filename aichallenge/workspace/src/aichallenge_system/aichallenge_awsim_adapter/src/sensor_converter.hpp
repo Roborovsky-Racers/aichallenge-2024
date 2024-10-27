@@ -35,6 +35,7 @@ public:
   explicit SensorConverter(const rclcpp::NodeOptions & node_options);
 
 private:
+  rclcpp::Subscription<PoseStamped>::SharedPtr sub_outlier_gnss_pose_;
   rclcpp::Subscription<PoseStamped>::SharedPtr sub_gnss_pose_;
   rclcpp::Subscription<PoseWithCovarianceStamped>::SharedPtr sub_gnss_pose_cov_;
   rclcpp::Subscription<Imu>::SharedPtr sub_imu_;
@@ -45,11 +46,13 @@ private:
   rclcpp::Publisher<SteeringReport>::SharedPtr pub_steering_report_;
 
 
+  void on_outlier_gnss_pose(const PoseStamped::ConstSharedPtr msg);
   void on_gnss_pose(const PoseStamped::ConstSharedPtr msg);
   void on_gnss_pose_cov(const PoseWithCovarianceStamped::ConstSharedPtr msg);
   void on_imu(const Imu::ConstSharedPtr msg);
   void on_steering_report(const SteeringReport::ConstSharedPtr msg);
 
+  std::optional<PoseStamped> outlier_gnss_pose_;
   PoseStamped::SharedPtr pose_;
   PoseWithCovarianceStamped::SharedPtr pose_cov_;
   Imu::SharedPtr imu_;
