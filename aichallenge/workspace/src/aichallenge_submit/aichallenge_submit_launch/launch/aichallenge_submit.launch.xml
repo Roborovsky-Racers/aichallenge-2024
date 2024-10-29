@@ -11,11 +11,11 @@
   <log message=" - sensor_model: $(var sensor_model)"/>
   <log message=" - launch_vehicle_interface: $(var launch_vehicle_interface)"/>
 
-  <include file="$(find-pkg-share aichallenge_submit_launch)/launch/reference.launch.xml" >
+  <include file="$(find-pkg-share aichallenge_submit_launch)/launch/reference.launch.xml">
     <arg name="vehicle_model" value="racing_kart"/>
     <arg name="sensor_model" value="$(var sensor_model)"/>
     <arg name="map_path" value="$(find-pkg-share aichallenge_submit_launch)/map"/>
-    <arg name="lanelet2_map_file" value="lanelet2_map_final_ver2.osm"/>
+    <arg name="lanelet2_map_file" value="lanelet2_map_final_ver3.osm"/>
     <arg name="use_sim_time" value="$(var use_sim_time)"/>
     <arg name="simulation" value="$(var simulation)"/>
     <arg name="launch_vehicle_interface" value="$(var launch_vehicle_interface)"/>
