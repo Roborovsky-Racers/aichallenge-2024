@@ -10,12 +10,20 @@ sim:
 	@${AWSIM_PATH}/AWSIM.x86_64 --timeout 86400.0 &
 
 rviz:
-	@ros2 run rviz2 rviz2 -d $(RVIZ_CONFIG) -s $(RVIZ_IMAGE)
+	@echo "Start Rviz and visualization"
+	@ros2 launch aichallenge_submit_launch rviz.launch.xml rviz_config:=$(RVIZ_CONFIG)
+
+rviz-bg:
+	@echo "Start Rviz and visualization in background"
+	@ros2 launch aichallenge_submit_launch rviz.launch.xml rviz_config:=$(RVIZ_CONFIG)
 
 aw:
 	@echo "Start Autoware in SIM"
-	@ros2 launch aichallenge_submit_launch additional.launch.xml &
-	@ros2 launch aichallenge_system_launch aichallenge_system.launch.xml simulation:=true use_sim_time:=true run_rviz:=true rviz_config:=$(RVIZ_CONFIG) >autoware.log 2>&1 &
+	@ros2 launch aichallenge_system_launch aichallenge_system.launch.xml simulation:=true use_sim_time:=true run_rviz:=false 
+
+aw-bg:
+	@echo "Start Autoware in SIM in background"
+	@ros2 launch aichallenge_system_launch aichallenge_system.launch.xml simulation:=true use_sim_time:=true run_rviz:=false  &
 
 vehicle:
 	@echo "Start Autoware in REAL"
@@ -50,8 +58,11 @@ reset:
 kill:
 	@echo "Kill all"
 	@bash -i -c "rkill"
+kill-mpc:
+	@sh kill_mpc.sh
 
-setup: sim aw
+
+setup: sim rviz-bg aw-bg
 	@echo ""
 
 setup-real: vehicle
