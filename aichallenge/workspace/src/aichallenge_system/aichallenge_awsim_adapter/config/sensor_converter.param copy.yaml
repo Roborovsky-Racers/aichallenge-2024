@@ -9,8 +9,8 @@
     gnss_pose_delay: 500  # [ms]
     # gnss_pose_delay: 300  # [ms]
 
-    gnss_pose_cov_delay: 500  # [ms]
-    # gnss_pose_cov_delay: 200  # [ms]
+    # gnss_pose_cov_delay: 500  # [ms]
+    gnss_pose_cov_delay: 200  # [ms]
     # gnss_pose_cov_delay_mean: 0.05  # [s]
     # gnss_pose_cov_delay_stddev: 0.1  # [s]
     gnss_pose_cov_delay_mean: 0.00  # [s]

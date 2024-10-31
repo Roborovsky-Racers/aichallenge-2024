@@ -37,8 +37,15 @@ SensorConverter::SensorConverter(const rclcpp::NodeOptions & node_options)
 
   // Parameters
   gnss_value_uptate_period_ = declare_parameter<double>("gnss_value_uptate_period");
+  gnss_value_uptate_period_mean_ = declare_parameter<double>("gnss_value_uptate_period_mean");
+  gnss_value_uptate_period_stddev_ = declare_parameter<double>("gnss_value_uptate_period_stddev");
+  next_gnss_value_uptate_period_ = gnss_value_uptate_period_;
+
   gnss_pose_delay_ = declare_parameter<int>("gnss_pose_delay");
   gnss_pose_cov_delay_ = declare_parameter<int>("gnss_pose_cov_delay");
+  gnss_pose_cov_delay_mean_ = declare_parameter<double>("gnss_pose_cov_delay_mean");
+  gnss_pose_cov_delay_stddev_ = declare_parameter<double>("gnss_pose_cov_delay_stddev");
+
   gnss_pose_mean_ = declare_parameter<double>("gnss_pose_mean");
   gnss_pose_stddev_ = declare_parameter<double>("gnss_pose_stddev");
   gnss_pose_cov_mean_ = declare_parameter<double>("gnss_pose_cov_mean");
@@ -80,6 +87,9 @@ SensorConverter::SensorConverter(const rclcpp::NodeOptions & node_options)
   imu_ang_distribution_ = std::normal_distribution<double>(imu_ang_mean_, imu_ang_stddev_);
   imu_ori_distribution_ = std::normal_distribution<double>(imu_ori_mean_, imu_ori_stddev_);
   steering_angle_distribution_ = std::normal_distribution<double>(steering_angle_mean_, steering_angle_stddev_);
+  gnss_update_period_distribution_ = std::normal_distribution<double>(gnss_value_uptate_period_mean_, gnss_value_uptate_period_stddev_);
+  gnss_pose_cov_delay_distribution_ = std::normal_distribution<double>(gnss_pose_cov_delay_mean_, gnss_pose_cov_delay_stddev_);
+// next_gnss_pose_cov_delay_
 }
 
 void SensorConverter::on_outlier_gnss_pose(const PoseStamped::ConstSharedPtr msg) {
@@ -157,20 +167,31 @@ void SensorConverter::on_gnss_pose_cov(const PoseWithCovarianceStamped::ConstSha
       noised_pose_cov->pose.pose.position.x += outlier_gnss_pose_->pose.position.x;
       noised_pose_cov->pose.pose.position.y += outlier_gnss_pose_->pose.position.y;
       outlier_gnss_pose_ = std::nullopt;
-      RCLCPP_WARN(get_logger(), "Outlier GNSS pose detected! x: %f, y: %f",
-                  outlier_gnss_pose_->pose.position.x, outlier_gnss_pose_->pose.position.y);
+      // RCLCPP_WARN(get_logger(), "Outlier GNSS pose detected! x: %f, y: %f",
+      //             outlier_gnss_pose_->pose.position.x, outlier_gnss_pose_->pose.position.y);
     }
 
     return noised_pose_cov;
   };
 
   // If the pose is older than the value update period, update the pose
-  if (pose_cov_ == nullptr || (now() - pose_cov_->header.stamp).seconds() >= gnss_value_uptate_period_) {
+  if (pose_cov_ == nullptr || (now() - pose_cov_->header.stamp).seconds() >= next_gnss_value_uptate_period_) {
     pose_cov_ = process_gnss_cov();
-  } 
+    next_gnss_value_uptate_period_ = std::max(gnss_value_uptate_period_, gnss_value_uptate_period_ + gnss_update_period_distribution_(generator_));
+
+    next_gnss_pose_cov_delay_  = std::max(gnss_pose_cov_delay_, gnss_pose_cov_delay_ + static_cast<int>(gnss_pose_cov_delay_distribution_(generator_) * 1000));
+
+    int next_gnss_value_uptate_period_msec = static_cast<int>(next_gnss_value_uptate_period_ * 1000.0 + 0.05);
+
+    if(next_gnss_pose_cov_delay_ < next_gnss_value_uptate_period_msec + 50) {
+      next_gnss_pose_cov_delay_ = next_gnss_value_uptate_period_msec + 50;
+    }
+
+    // RCLCPP_WARN(get_logger(), "Next GNSS value update period: %f, delay: %d", next_gnss_value_uptate_period_, next_gnss_pose_cov_delay_);
+  }
 
   const auto delayed_publish = [this](PoseWithCovarianceStamped pose_cov) {
-    rclcpp::sleep_for(std::chrono::milliseconds(gnss_pose_cov_delay_));
+    rclcpp::sleep_for(std::chrono::milliseconds(next_gnss_pose_cov_delay_));
     pose_cov.header.stamp = now();
     pub_gnss_pose_cov_->publish(pose_cov);
   };
