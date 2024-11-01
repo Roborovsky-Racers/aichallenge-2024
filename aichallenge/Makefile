@@ -15,7 +15,7 @@ rviz:
 
 rviz-bg:
 	@echo "Start Rviz and visualization in background"
-	@ros2 launch aichallenge_submit_launch rviz.launch.xml rviz_config:=$(RVIZ_CONFIG)
+	@ros2 launch aichallenge_submit_launch rviz.launch.xml rviz_config:=$(RVIZ_CONFIG) &
 
 aw:
 	@echo "Start Autoware in SIM"
