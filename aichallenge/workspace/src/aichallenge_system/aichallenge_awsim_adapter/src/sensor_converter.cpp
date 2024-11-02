@@ -166,6 +166,28 @@ void SensorConverter::gnss_cov_update_and_publish_loop_() {
       return nearest_gnss_cov;
   };
 
+  const auto process_gnss_cov = [this](const auto& msg) {
+    PoseWithCovarianceStamped noised_pose_cov = msg;
+    noised_pose_cov.pose.pose.position.x += pose_cov_distribution_(generator_);
+    noised_pose_cov.pose.pose.position.y += pose_cov_distribution_(generator_);
+    noised_pose_cov.pose.pose.position.z += pose_cov_distribution_(generator_);
+    noised_pose_cov.pose.pose.orientation.x = 0.0;
+    noised_pose_cov.pose.pose.orientation.y = 0.0;
+    noised_pose_cov.pose.pose.orientation.z = 0.0;
+    noised_pose_cov.pose.pose.orientation.w = 0.0;
+
+    if(outlier_gnss_pose_.has_value()) {
+      noised_pose_cov.pose.pose.position.x += outlier_gnss_pose_->pose.position.x;
+      noised_pose_cov.pose.pose.position.y += outlier_gnss_pose_->pose.position.y;
+      outlier_gnss_pose_ = std::nullopt;
+      // RCLCPP_WARN(get_logger(), "Outlier GNSS pose detected! x: %f, y: %f",
+      //             outlier_gnss_pose_->pose.position.x, outlier_gnss_pose_->pose.position.y);
+    }
+
+    return noised_pose_cov;
+  };
+
+
   const auto publish_gnss_cov_with_now_stamp = [this](const auto& gnss_cov_msg) {
       auto msg = gnss_cov_msg;
       msg.header.stamp = get_clock()->now();
@@ -216,7 +238,7 @@ void SensorConverter::gnss_cov_update_and_publish_loop_() {
     // Try to get the nearest past GNSS pose covariance
     if(const auto nearest_past_pose_cov = pop_nearest_gnss_cov(past_stamp_with_delay)) {
       // If the nearest pose got, update and publish the pose
-      last_gnss_pose_cov = *nearest_past_pose_cov;
+      last_gnss_pose_cov = process_gnss_cov(*nearest_past_pose_cov);
       publish_gnss_cov_with_now_stamp(*last_gnss_pose_cov);
 
       // Update the next value update period
