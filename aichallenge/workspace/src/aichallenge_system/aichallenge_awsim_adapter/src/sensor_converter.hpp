@@ -16,6 +16,7 @@
 #define AUTOWARE_EXTERNAL_CMD_CONVERTER__NODE_HPP_
 
 
+#include <geometry_msgs/msg/detail/pose_with_covariance_stamped__struct.hpp>
 #include <random>
 #include <deque>
 #include <rclcpp/rclcpp.hpp>
@@ -34,6 +35,7 @@ class SensorConverter : public rclcpp::Node
 {
 public:
   explicit SensorConverter(const rclcpp::NodeOptions & node_options);
+  ~SensorConverter();
 
 private:
   rclcpp::Subscription<PoseStamped>::SharedPtr sub_outlier_gnss_pose_;
@@ -47,6 +49,7 @@ private:
   rclcpp::Publisher<SteeringReport>::SharedPtr pub_steering_report_;
 
 
+  void gnss_cov_update_and_publish_loop_();
   void on_outlier_gnss_pose(const PoseStamped::ConstSharedPtr msg);
   void on_gnss_pose(const PoseStamped::ConstSharedPtr msg);
   void on_gnss_pose_cov(const PoseWithCovarianceStamped::ConstSharedPtr msg);
@@ -59,8 +62,10 @@ private:
   Imu::SharedPtr imu_;
   SteeringReport::SharedPtr steering_report_;
   int gnss_pose_delay_;
-  int gnss_pose_cov_delay_;
-  int next_gnss_pose_cov_delay_;
+
+  std::mutex pose_cov_queue_mutex_;
+  std::deque<PoseWithCovarianceStamped> pose_cov_queue_;
+  std::thread gnss_cov_pub_thread_;
 
   std::mt19937 generator_;
   std::normal_distribution<double> pose_distribution_;
@@ -69,20 +74,26 @@ private:
   std::normal_distribution<double> imu_ang_distribution_;
   std::normal_distribution<double> imu_ori_distribution_;
   std::normal_distribution<double> steering_angle_distribution_;
-  std::normal_distribution<double> gnss_update_period_distribution_;
-  std::normal_distribution<double> gnss_pose_cov_delay_distribution_;
 
-  double gnss_value_uptate_period_;
-  double gnss_value_uptate_period_mean_;
-  double gnss_value_uptate_period_stddev_;
-  double next_gnss_value_uptate_period_;
+  double gnss_pose_cov_publish_period_;
+  double gnss_pose_cov_publish_period_mean_;
+  double gnss_pose_cov_publish_period_stddev_;
+  std::normal_distribution<double> gnss_pose_cov_publish_period_distribution_;
+
+  double gnss_pose_cov_value_uptate_period_;
+  double gnss_pose_cov_value_uptate_period_mean_;
+  double gnss_pose_cov_value_uptate_period_stddev_;
+  std::normal_distribution<double> gnss_pose_cov_value_update_period_distribution_;
+
+  double gnss_pose_cov_delay_;
+  double gnss_pose_cov_delay_mean_;
+  double gnss_pose_cov_delay_stddev_;
+  std::normal_distribution<double> gnss_pose_cov_delay_distribution_;
 
   double gnss_pose_mean_;
   double gnss_pose_stddev_;
   double gnss_pose_cov_mean_;
   double gnss_pose_cov_stddev_;
-  double gnss_pose_cov_delay_mean_;
-  double gnss_pose_cov_delay_stddev_;
 
   double imu_acc_mean_;
   double imu_acc_stddev_;

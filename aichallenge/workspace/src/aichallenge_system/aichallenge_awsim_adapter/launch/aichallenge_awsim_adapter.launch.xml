@@ -13,10 +13,10 @@
     <param name="csv_path_accel_map" value="$(var csv_path_accel_map)"/>
     <param name="csv_path_brake_map" value="$(var csv_path_brake_map)"/>
   </node>
-  <node pkg="aichallenge_awsim_adapter" exec="sensor_converter">
+  <node pkg="aichallenge_awsim_adapter" exec="sensor_converter" args="--ros-args --log-level sensor_converter:=debug">
     <param name="use_sim_time" value="true"/>
     <param from="$(find-pkg-share aichallenge_awsim_adapter)/config/sensor_converter.param.yaml" />
-    <remap from="/awsim/gnss/pose" to="/awsim/gnss/pose_throttle"/>
-    <remap from="/awsim/gnss/pose_with_covariance" to="/awsim/gnss/pose_with_covariance_throttle"/>
+    <!-- <remap from="/awsim/gnss/pose" to="/awsim/gnss/pose_throttle"/>
+    <remap from="/awsim/gnss/pose_with_covariance" to="/awsim/gnss/pose_with_covariance_throttle"/> -->
   </node>
 </launch>
