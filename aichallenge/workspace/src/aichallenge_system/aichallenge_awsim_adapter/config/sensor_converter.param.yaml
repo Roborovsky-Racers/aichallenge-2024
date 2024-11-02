@@ -1,21 +1,38 @@
 /**:
   ros__parameters:
-    gnss_value_uptate_period: 0.2  # [s]
+    gnss_pose_cov_value_uptate_period: 0.2  # [s]
+    gnss_pose_cov_value_uptate_period_mean: 0.0 # [s]
+    gnss_pose_cov_value_uptate_period_stddev: 0.08 # [s]
+
+    # gnss_pose_cov_delay: 0.5  # [s]
+    # gnss_pose_cov_delay_mean: 0.0  # [s]
+    # gnss_pose_cov_delay_stddev: 0.0  # [s]
+
+    # gnss_pose_cov_delay: 0.50  # [s]
+    gnss_pose_cov_delay: 0.30  # [s]  0.3~0.4s あたりが実機の遅延に近そう
+    gnss_pose_cov_delay_mean: 0.02  # [s]
+    gnss_pose_cov_delay_stddev: 0.05  # [s]
+
+    # gnss_pose_cov_publish_period: 0.0625 # 16Hz
+    gnss_pose_cov_publish_period: 0.06
+    gnss_pose_cov_publish_period_mean: 0.0
+    gnss_pose_cov_publish_period_stddev: 0.01
+
     gnss_pose_delay: 500  # [ms]
-    gnss_pose_cov_delay: 500  # [ms]
-    # gnss_pose_delay: 300  # [ms]
-    # gnss_pose_cov_delay: 300  # [ms]
     gnss_pose_mean: 0.0
 #    gnss_pose_stddev: 0.005
     gnss_pose_stddev: 0.015
-    gnss_pose_cov_mean: 0.0
+
+    gnss_pose_cov_mean: 0.02
     # gnss_pose_cov_stddev: 0.007
-    gnss_pose_cov_stddev: 0.015
+    # gnss_pose_cov_stddev: 0.015
+    gnss_pose_cov_stddev: 0.0015
 
     imu_acc_mean: 0.0
     imu_acc_stddev: 0.001
     imu_ang_mean: 0.0
-    imu_ang_stddev: 0.0025
+    # imu_ang_stddev: 0.0025
+    imu_ang_stddev: 0.07
     imu_ori_mean: 0.0
     imu_ori_stddev: 0.001
 

@@ -7,6 +7,12 @@ sim:
 	@sudo ip link set multicast on lo
 	@sudo sysctl -w net.core.rmem_max=2147483647 >/dev/null
 	@echo "Start AWSIM"
+	@${AWSIM_PATH}/AWSIM.x86_64 --timeout 86400.0
+
+sim-bg:
+	@sudo ip link set multicast on lo
+	@sudo sysctl -w net.core.rmem_max=2147483647 >/dev/null
+	@echo "Start AWSIM"
 	@${AWSIM_PATH}/AWSIM.x86_64 --timeout 86400.0 &
 
 rviz:
@@ -15,7 +21,7 @@ rviz:
 
 rviz-bg:
 	@echo "Start Rviz and visualization in background"
-	@ros2 launch aichallenge_submit_launch rviz.launch.xml rviz_config:=$(RVIZ_CONFIG)
+	@ros2 launch aichallenge_submit_launch rviz.launch.xml rviz_config:=$(RVIZ_CONFIG) &
 
 aw:
 	@echo "Start Autoware in SIM"
@@ -62,7 +68,7 @@ kill-mpc:
 	@sh kill_mpc.sh
 
 
-setup: sim rviz-bg aw-bg
+setup: sim-bg rviz-bg aw-bg
 	@echo ""
 
 setup-real: vehicle
