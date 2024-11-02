@@ -31,6 +31,52 @@ using geometry_msgs::msg::PoseWithCovarianceStamped;
 using sensor_msgs::msg::Imu;
 using autoware_auto_vehicle_msgs::msg::SteeringReport;
 
+class MultimodalDistribution {
+public:
+    using UniquePtr = std::unique_ptr<MultimodalDistribution>;
+
+    MultimodalDistribution(const std::vector<double>& means, const std::vector<double>& stddevs, const std::vector<double>& weights)
+        : mix_dist_(0.0, 1.0), cumulative_weights_(weights.size()) {
+        
+        // Ensure the means, stddevs, and weights vectors are the same size
+        if (means.size() != stddevs.size() || means.size() != weights.size()) {
+            throw std::invalid_argument("Vectors of means, stddevs, and weights must be the same size.");
+        }
+
+        // Initialize normal distributions based on means and stddevs
+        for (size_t i = 0; i < means.size(); ++i) {
+            distributions_.emplace_back(means[i], stddevs[i]);
+        }
+
+        // Compute cumulative weights for selecting distributions
+        double total_weight = 0.0;
+        for (size_t i = 0; i < weights.size(); ++i) {
+            total_weight += weights[i];
+            cumulative_weights_[i] = total_weight;
+        }
+
+        // Normalize cumulative weights to sum to 1
+        for (double& weight : cumulative_weights_) {
+            weight /= total_weight;
+        }
+    }
+
+    double sample(std::mt19937& generator) {
+        // Generate a random number and determine which distribution to sample from
+        double rand_val = mix_dist_(generator);
+        size_t index = 0;
+        while (index < cumulative_weights_.size() && rand_val > cumulative_weights_[index]) {
+            ++index;
+        }
+        return distributions_[index](generator);
+    }
+
+private:
+    std::vector<std::normal_distribution<double>> distributions_; // Normal distributions for each peak
+    std::uniform_real_distribution<double> mix_dist_; // Uniform distribution to select the peak
+    std::vector<double> cumulative_weights_; // Cumulative weights for each distribution
+};
+
 class SensorConverter : public rclcpp::Node
 {
 public:
@@ -69,7 +115,9 @@ private:
 
   std::mt19937 generator_;
   std::normal_distribution<double> pose_distribution_;
-  std::normal_distribution<double> pose_cov_distribution_;
+  // std::normal_distribution<double> pose_cov_distribution_;
+  MultimodalDistribution::UniquePtr pose_cov_distribution_x_;
+  MultimodalDistribution::UniquePtr pose_cov_distribution_y_;
   std::normal_distribution<double> imu_acc_distribution_;
   std::normal_distribution<double> imu_ang_distribution_;
   std::normal_distribution<double> imu_ori_distribution_;

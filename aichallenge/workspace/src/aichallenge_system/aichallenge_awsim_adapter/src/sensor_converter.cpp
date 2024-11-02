@@ -89,7 +89,36 @@ SensorConverter::SensorConverter(const rclcpp::NodeOptions & node_options)
   std::random_device rd;
   generator_ = std::mt19937(rd());
   pose_distribution_ = std::normal_distribution<double>(gnss_pose_mean_, gnss_pose_stddev_);
-  pose_cov_distribution_ = std::normal_distribution<double>(gnss_pose_cov_mean_, gnss_pose_cov_stddev_);
+
+  // pose_cov_distribution_ = std::normal_distribution<double>(gnss_pose_cov_mean_, gnss_pose_cov_stddev_);
+  std::vector<double> gnss_cov_x_means = {
+    -1.7 * gnss_pose_cov_mean_,
+    -gnss_pose_cov_mean_,
+    gnss_pose_cov_mean_,
+    1.7 * gnss_pose_cov_mean_,
+  };
+  std::vector<double> gnss_cov_y_means = {
+    -3.3 * gnss_pose_cov_mean_,
+    -2.0 * gnss_pose_cov_mean_,
+    -gnss_pose_cov_mean_,
+    gnss_pose_cov_mean_,
+    1.7 * gnss_pose_cov_mean_,
+    2.0 * gnss_pose_cov_mean_,
+    3.3 * gnss_pose_cov_mean_,
+  };
+
+  std::vector<double> gnss_cov_x_std_devs, gnss_cov_y_std_devs;
+  gnss_cov_x_std_devs.resize(gnss_cov_x_means.size(), gnss_pose_cov_stddev_);
+  gnss_cov_y_std_devs.resize(gnss_cov_y_means.size(), gnss_pose_cov_stddev_);
+
+  std::vector<double> gnss_cov_x_weights = {0.1, 0.3, 0.3, 0.3};
+  std::vector<double> gnss_cov_y_weights = {0.1, 0.1, 0.3, 0.3, 0.1, 0.1, 0.1};
+
+  pose_cov_distribution_x_ = std::make_unique<MultimodalDistribution>(
+    gnss_cov_x_means, gnss_cov_x_std_devs, gnss_cov_x_weights);
+  pose_cov_distribution_y_ = std::make_unique<MultimodalDistribution>(
+    gnss_cov_y_means, gnss_cov_y_std_devs, gnss_cov_y_weights);
+
   imu_acc_distribution_ = std::normal_distribution<double>(imu_acc_mean_, imu_acc_stddev_);
   imu_ang_distribution_ = std::normal_distribution<double>(imu_ang_mean_, imu_ang_stddev_);
   imu_ori_distribution_ = std::normal_distribution<double>(imu_ori_mean_, imu_ori_stddev_);
@@ -168,13 +197,19 @@ void SensorConverter::gnss_cov_update_and_publish_loop_() {
 
   const auto process_gnss_cov = [this](const auto& msg) {
     PoseWithCovarianceStamped noised_pose_cov = msg;
-    noised_pose_cov.pose.pose.position.x += pose_cov_distribution_(generator_);
-    noised_pose_cov.pose.pose.position.y += pose_cov_distribution_(generator_);
-    noised_pose_cov.pose.pose.position.z += pose_cov_distribution_(generator_);
-    noised_pose_cov.pose.pose.orientation.x = 0.0;
-    noised_pose_cov.pose.pose.orientation.y = 0.0;
-    noised_pose_cov.pose.pose.orientation.z = 0.0;
-    noised_pose_cov.pose.pose.orientation.w = 0.0;
+    // noised_pose_cov.pose.pose.position.x += pose_cov_distribution_(generator_);
+    // noised_pose_cov.pose.pose.position.y += pose_cov_distribution_(generator_);
+    // noised_pose_cov.pose.pose.position.z += pose_cov_distribution_(generator_);
+    noised_pose_cov.pose.pose.position.x += pose_cov_distribution_x_->sample(generator_);
+    noised_pose_cov.pose.pose.position.y += pose_cov_distribution_y_->sample(generator_);
+    // noised_pose_cov.pose.pose.orientation.x = 0.0;
+    // noised_pose_cov.pose.pose.orientation.y = 0.0;
+    // noised_pose_cov.pose.pose.orientation.z = 0.0;
+    // noised_pose_cov.pose.pose.orientation.w = 0.0;
+    noised_pose_cov.pose.pose.orientation.x += pose_distribution_(generator_);
+    noised_pose_cov.pose.pose.orientation.y += pose_distribution_(generator_);
+    noised_pose_cov.pose.pose.orientation.z += pose_distribution_(generator_);
+    noised_pose_cov.pose.pose.orientation.w += pose_distribution_(generator_);
 
     if(outlier_gnss_pose_.has_value()) {
       noised_pose_cov.pose.pose.position.x += outlier_gnss_pose_->pose.position.x;

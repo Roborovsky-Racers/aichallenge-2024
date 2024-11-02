@@ -1,0 +1,263 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<root>
+ <tabbed_widget name="Main Window" parent="main_window">
+  <Tab tab_name="tab1" containers="1">
+   <Container>
+    <DockSplitter orientation="-" count="1" sizes="1">
+     <DockArea name="...">
+      <plot mode="TimeSeries" flip_x="false" style="Lines" flip_y="false">
+       <range right="214.961838" bottom="-0.100000" top="0.100000" left="0.000104"/>
+       <limitY/>
+       <curve name="/awsim/gnss/pose_with_covariance/pose/covariance[0]" color="#f14cc1"/>
+       <curve name="/awsim/gnss/pose_with_covariance/pose/covariance[10]" color="#9467bd"/>
+       <curve name="/awsim/gnss/pose_with_covariance/pose/covariance[11]" color="#17becf"/>
+       <curve name="/awsim/gnss/pose_with_covariance/pose/covariance[12]" color="#bcbd22"/>
+       <curve name="/awsim/gnss/pose_with_covariance/pose/covariance[13]" color="#1f77b4"/>
+       <curve name="/awsim/gnss/pose_with_covariance/pose/covariance[14]" color="#d62728"/>
+       <curve name="/awsim/gnss/pose_with_covariance/pose/covariance[15]" color="#1ac938"/>
+       <curve name="/awsim/gnss/pose_with_covariance/pose/covariance[16]" color="#ff7f0e"/>
+       <curve name="/awsim/gnss/pose_with_covariance/pose/covariance[17]" color="#f14cc1"/>
+       <curve name="/awsim/gnss/pose_with_covariance/pose/covariance[18]" color="#9467bd"/>
+       <curve name="/awsim/gnss/pose_with_covariance/pose/covariance[19]" color="#17becf"/>
+       <curve name="/awsim/gnss/pose_with_covariance/pose/covariance[1]" color="#bcbd22"/>
+       <curve name="/awsim/gnss/pose_with_covariance/pose/covariance[20]" color="#1f77b4"/>
+       <curve name="/awsim/gnss/pose_with_covariance/pose/covariance[21]" color="#d62728"/>
+       <curve name="/awsim/gnss/pose_with_covariance/pose/covariance[22]" color="#1ac938"/>
+       <curve name="/awsim/gnss/pose_with_covariance/pose/covariance[23]" color="#ff7f0e"/>
+       <curve name="/awsim/gnss/pose_with_covariance/pose/covariance[24]" color="#f14cc1"/>
+       <curve name="/awsim/gnss/pose_with_covariance/pose/covariance[25]" color="#9467bd"/>
+       <curve name="/awsim/gnss/pose_with_covariance/pose/covariance[26]" color="#17becf"/>
+       <curve name="/awsim/gnss/pose_with_covariance/pose/covariance[27]" color="#bcbd22"/>
+       <curve name="/awsim/gnss/pose_with_covariance/pose/covariance[28]" color="#1f77b4"/>
+       <curve name="/awsim/gnss/pose_with_covariance/pose/covariance[29]" color="#d62728"/>
+       <curve name="/awsim/gnss/pose_with_covariance/pose/covariance[2]" color="#1ac938"/>
+       <curve name="/awsim/gnss/pose_with_covariance/pose/covariance[30]" color="#ff7f0e"/>
+       <curve name="/awsim/gnss/pose_with_covariance/pose/covariance[31]" color="#f14cc1"/>
+       <curve name="/awsim/gnss/pose_with_covariance/pose/covariance[32]" color="#9467bd"/>
+       <curve name="/awsim/gnss/pose_with_covariance/pose/covariance[33]" color="#17becf"/>
+       <curve name="/awsim/gnss/pose_with_covariance/pose/covariance[34]" color="#bcbd22"/>
+       <curve name="/awsim/gnss/pose_with_covariance/pose/covariance[35]" color="#1f77b4"/>
+       <curve name="/awsim/gnss/pose_with_covariance/pose/covariance[3]" color="#d62728"/>
+       <curve name="/awsim/gnss/pose_with_covariance/pose/covariance[4]" color="#1ac938"/>
+       <curve name="/awsim/gnss/pose_with_covariance/pose/covariance[5]" color="#ff7f0e"/>
+       <curve name="/awsim/gnss/pose_with_covariance/pose/covariance[6]" color="#f14cc1"/>
+       <curve name="/awsim/gnss/pose_with_covariance/pose/covariance[7]" color="#9467bd"/>
+       <curve name="/awsim/gnss/pose_with_covariance/pose/covariance[8]" color="#17becf"/>
+       <curve name="/awsim/gnss/pose_with_covariance/pose/covariance[9]" color="#bcbd22"/>
+      </plot>
+     </DockArea>
+    </DockSplitter>
+   </Container>
+  </Tab>
+  <Tab tab_name="tab2" containers="1">
+   <Container>
+    <DockSplitter orientation="-" count="1" sizes="1">
+     <DockArea name="...">
+      <plot mode="TimeSeries" flip_x="false" style="Lines" flip_y="false">
+       <range right="214.961838" bottom="-0.100000" top="0.100000" left="0.000104"/>
+       <limitY/>
+       <curve name="/sensing/gnss/pose_with_covariance/pose/covariance[0]" color="#1f77b4"/>
+       <curve name="/sensing/gnss/pose_with_covariance/pose/covariance[1]" color="#d62728"/>
+       <curve name="/sensing/gnss/pose_with_covariance/pose/covariance[2]" color="#1ac938"/>
+       <curve name="/sensing/gnss/pose_with_covariance/pose/covariance[3]" color="#ff7f0e"/>
+       <curve name="/sensing/gnss/pose_with_covariance/pose/covariance[4]" color="#f14cc1"/>
+       <curve name="/sensing/gnss/pose_with_covariance/pose/covariance[5]" color="#9467bd"/>
+       <curve name="/sensing/gnss/pose_with_covariance/pose/covariance[6]" color="#17becf"/>
+       <curve name="/sensing/gnss/pose_with_covariance/pose/covariance[7]" color="#bcbd22"/>
+       <curve name="/sensing/gnss/pose_with_covariance/pose/covariance[8]" color="#1f77b4"/>
+       <curve name="/sensing/gnss/pose_with_covariance/pose/covariance[9]" color="#d62728"/>
+       <curve name="/sensing/gnss/pose_with_covariance/pose/covariance[10]" color="#1ac938"/>
+       <curve name="/sensing/gnss/pose_with_covariance/pose/covariance[11]" color="#ff7f0e"/>
+       <curve name="/sensing/gnss/pose_with_covariance/pose/covariance[12]" color="#f14cc1"/>
+       <curve name="/sensing/gnss/pose_with_covariance/pose/covariance[13]" color="#9467bd"/>
+       <curve name="/sensing/gnss/pose_with_covariance/pose/covariance[14]" color="#17becf"/>
+       <curve name="/sensing/gnss/pose_with_covariance/pose/covariance[15]" color="#bcbd22"/>
+       <curve name="/sensing/gnss/pose_with_covariance/pose/covariance[16]" color="#1f77b4"/>
+       <curve name="/sensing/gnss/pose_with_covariance/pose/covariance[17]" color="#d62728"/>
+       <curve name="/sensing/gnss/pose_with_covariance/pose/covariance[18]" color="#1ac938"/>
+       <curve name="/sensing/gnss/pose_with_covariance/pose/covariance[19]" color="#ff7f0e"/>
+       <curve name="/sensing/gnss/pose_with_covariance/pose/covariance[20]" color="#f14cc1"/>
+       <curve name="/sensing/gnss/pose_with_covariance/pose/covariance[22]" color="#9467bd"/>
+       <curve name="/sensing/gnss/pose_with_covariance/pose/covariance[23]" color="#17becf"/>
+       <curve name="/sensing/gnss/pose_with_covariance/pose/covariance[24]" color="#bcbd22"/>
+       <curve name="/sensing/gnss/pose_with_covariance/pose/covariance[25]" color="#1f77b4"/>
+       <curve name="/sensing/gnss/pose_with_covariance/pose/covariance[26]" color="#d62728"/>
+       <curve name="/sensing/gnss/pose_with_covariance/pose/covariance[27]" color="#1ac938"/>
+       <curve name="/sensing/gnss/pose_with_covariance/pose/covariance[29]" color="#ff7f0e"/>
+       <curve name="/sensing/gnss/pose_with_covariance/pose/covariance[30]" color="#f14cc1"/>
+       <curve name="/sensing/gnss/pose_with_covariance/pose/covariance[31]" color="#9467bd"/>
+       <curve name="/sensing/gnss/pose_with_covariance/pose/covariance[32]" color="#17becf"/>
+       <curve name="/sensing/gnss/pose_with_covariance/pose/covariance[33]" color="#bcbd22"/>
+       <curve name="/sensing/gnss/pose_with_covariance/pose/covariance[34]" color="#1f77b4"/>
+       <curve name="/sensing/gnss/pose_with_covariance/pose/covariance[35]" color="#d62728"/>
+      </plot>
+     </DockArea>
+    </DockSplitter>
+   </Container>
+  </Tab>
+  <Tab tab_name="tab3" containers="1">
+   <Container>
+    <DockSplitter orientation="-" count="3" sizes="0.333333;0.333333;0.333333">
+     <DockArea name="...">
+      <plot mode="TimeSeries" flip_x="false" style="Lines" flip_y="false">
+       <range right="214.961838" bottom="-0.100000" top="0.100000" left="0.000104"/>
+       <limitY/>
+       <curve name="/sensing/gnss/pose_with_covariance/pose/covariance[21]" color="#1ac938"/>
+       <curve name="/sensing/gnss/pose_with_covariance/pose/covariance[28]" color="#ff7f0e"/>
+       <curve name="/sensing/gnss/pose_with_covariance/pose/covariance[0]" color="#1f77b4"/>
+       <curve name="/sensing/gnss/pose_with_covariance/pose/covariance[7]" color="#bcbd22"/>
+      </plot>
+     </DockArea>
+     <DockArea name="...">
+      <plot mode="TimeSeries" flip_x="false" style="Lines" flip_y="false">
+       <range right="214.961838" bottom="-0.004541" top="0.032055" left="0.000104"/>
+       <limitY/>
+       <curve name="/localization/pose_with_covariance/pose/covariance[0]" color="#f14cc1"/>
+       <curve name="/localization/pose_with_covariance/pose/covariance[6]" color="#9467bd"/>
+      </plot>
+     </DockArea>
+     <DockArea name="...">
+      <plot mode="TimeSeries" flip_x="false" style="LinesAndDots" flip_y="false">
+       <range right="1400074.850628" bottom="138.425000" top="246.575000" left="0.000000"/>
+       <limitY/>
+      </plot>
+     </DockArea>
+    </DockSplitter>
+   </Container>
+  </Tab>
+  <Tab tab_name="tab4" containers="1">
+   <Container>
+    <DockSplitter orientation="-" count="1" sizes="1">
+     <DockArea name="...">
+      <plot mode="TimeSeries" flip_x="false" style="Lines" flip_y="false">
+       <range right="214.961838" bottom="0.000000" top="0.200000" left="0.000104"/>
+       <limitY/>
+       <curve name="/localization/imu_gnss_poser/pose_with_covariance/pose/covariance[0]" color="#17becf"/>
+      </plot>
+     </DockArea>
+    </DockSplitter>
+   </Container>
+  </Tab>
+  <Tab tab_name="tab5" containers="1">
+   <Container>
+    <DockSplitter orientation="-" count="2" sizes="0.40935;0.59065">
+     <DockSplitter orientation="|" count="2" sizes="0.500238;0.499762">
+      <DockArea name="...">
+       <plot mode="TimeSeries" flip_x="false" style="Dots" flip_y="false">
+        <range right="214.961838" bottom="89611.210194" top="89681.492258" left="0.000104"/>
+        <limitY/>
+        <curve name="/sensing/gnss/pose_with_covariance/pose/pose/position/x" color="#1ac938"/>
+        <curve name="/localization/kinematic_state/pose/pose/position/x" color="#f14cc1"/>
+       </plot>
+      </DockArea>
+      <DockArea name="...">
+       <plot mode="TimeSeries" flip_x="false" style="Dots" flip_y="false">
+        <range right="214.961838" bottom="-0.100000" top="0.100000" left="0.000104"/>
+        <limitY/>
+        <curve name="/sensing/gnss/pose_with_covariance/pose/covariance[0]" color="#f14cc1"/>
+       </plot>
+      </DockArea>
+     </DockSplitter>
+     <DockSplitter orientation="|" count="2" sizes="0.500238;0.499762">
+      <DockSplitter orientation="-" count="2" sizes="0.500967;0.499033">
+       <DockArea name="...">
+        <plot mode="TimeSeries" flip_x="false" style="LinesAndDots" flip_y="false">
+         <range right="214.961838" bottom="-0.051509" top="0.061264" left="0.000104"/>
+         <limitY/>
+         <curve name="/sensing/gnss/pose_with_covariance/pose/pose/orientation/w" color="#bcbd22"/>
+         <curve name="/sensing/gnss/pose_with_covariance/pose/pose/orientation/x" color="#1f77b4"/>
+         <curve name="/sensing/gnss/pose_with_covariance/pose/pose/orientation/y" color="#d62728"/>
+         <curve name="/sensing/gnss/pose_with_covariance/pose/pose/orientation/z" color="#1ac938"/>
+        </plot>
+       </DockArea>
+       <DockArea name="...">
+        <plot mode="TimeSeries" flip_x="false" style="Lines" flip_y="false">
+         <range right="214.961838" bottom="-0.209583" top="8.534451" left="0.000104"/>
+         <limitY/>
+         <curve name="/vehicle/status/velocity_status/longitudinal_velocity" color="#ff7f0e"/>
+        </plot>
+       </DockArea>
+      </DockSplitter>
+      <DockArea name="...">
+       <plot mode="TimeSeries" flip_x="false" style="Dots" flip_y="false">
+        <range right="214.961838" bottom="-0.000253" top="0.031950" left="0.000104"/>
+        <limitY/>
+        <curve name="/localization/kinematic_state/pose/covariance/[0;0]" color="#1f77b4"/>
+       </plot>
+      </DockArea>
+     </DockSplitter>
+    </DockSplitter>
+   </Container>
+  </Tab>
+  <Tab tab_name="tab6" containers="1">
+   <Container>
+    <DockSplitter orientation="-" count="1" sizes="1">
+     <DockArea name="...">
+      <plot mode="XYPlot" flip_x="false" style="Dots" flip_y="false">
+       <range right="89746.187050" bottom="43118.050342" top="43190.362854" left="89546.515402"/>
+       <limitY/>
+       <curve name="/sensing/gnss/pose_with_covariance/pose/pose/position/[x;y]" curve_y="/sensing/gnss/pose_with_covariance/pose/pose/position/y" color="#9467bd" curve_x="/sensing/gnss/pose_with_covariance/pose/pose/position/x"/>
+       <curve name="/localization/kinematic_state/pose/pose/position/[x;y]" curve_y="/localization/kinematic_state/pose/pose/position/y" color="#ff7f0e" curve_x="/localization/kinematic_state/pose/pose/position/x"/>
+      </plot>
+     </DockArea>
+    </DockSplitter>
+   </Container>
+  </Tab>
+  <currentTabIndex index="4"/>
+ </tabbed_widget>
+ <use_relative_time_offset enabled="1"/>
+ <!-- - - - - - - - - - - - - - - -->
+ <!-- - - - - - - - - - - - - - - -->
+ <Plugins>
+  <plugin ID="DataLoad CSV">
+   <parameters time_axis="" delimiter="0"/>
+  </plugin>
+  <plugin ID="DataLoad MCAP"/>
+  <plugin ID="DataLoad ROS2 bags">
+   <use_header_stamp value="false"/>
+   <discard_large_arrays value="true"/>
+   <max_array_size value="100"/>
+   <boolean_strings_to_number value="true"/>
+   <remove_suffix_from_strings value="true"/>
+   <selected_topics value="/control/command/actuation_cmd;/control/command/control_cmd;/localization/acceleration;/localization/gyro_twist;/localization/gyro_twist_raw;/localization/imu_gnss_poser/pose_with_covariance;/localization/kinematic_state;/localization/pose;/localization/pose_with_covariance;/localization/twist;/sensing/gnss/pose;/sensing/gnss/pose_with_covariance;/sensing/imu/imu_data;/sensing/imu/imu_raw;/sensing/vehicle_velocity_converter/twist_with_covariance;/vehicle/raw_vehicle_cmd_converter/debug/steer_pid;/vehicle/status/control_mode;/vehicle/status/gear_status;/vehicle/status/steering_status;/vehicle/status/velocity_status;/awsim/gnss/pose_with_covariance;/awsim/imu"/>
+  </plugin>
+  <plugin ID="DataLoad ULog"/>
+  <plugin ID="ROS2 Topic Subscriber">
+   <use_header_stamp value="false"/>
+   <discard_large_arrays value="true"/>
+   <max_array_size value="100"/>
+   <boolean_strings_to_number value="true"/>
+   <remove_suffix_from_strings value="true"/>
+   <selected_topics value="/control/command/actuation_cmd;/control/command/control_cmd;/localization/acceleration;/localization/gnss_filter/distance_from_ekf;/localization/kinematic_state;/localization_test/kinematic_state;/sensing/gnss/pose_with_covariance;/sensing/gnss/pose_with_covariance_filtered;/tf;/vehicle/status/gear_status;/vehicle/status/steering_status;/vehicle/status/velocity_status;/localization_test/imu_gnss_poser/pose_with_covariance;/localization_test/gnss_filter/distance_from_ekf;/localization_test/pose_with_covariance;/localization_test/sensing/gnss/pose_with_covariance_filtered"/>
+  </plugin>
+  <plugin ID="UDP Server"/>
+  <plugin ID="WebSocket Server"/>
+  <plugin ID="ZMQ Subscriber"/>
+  <plugin ID="Fast Fourier Transform"/>
+  <plugin ID="Quaternion to RPY"/>
+  <plugin ID="Reactive Script Editor">
+   <library code="--[[ Helper function to create a series from arrays&#xa;&#xa; new_series: a series previously created with ScatterXY.new(name)&#xa; prefix:     prefix of the timeseries, before the index of the array&#xa; suffix_X:   suffix to complete the name of the series containing the X value. If [nil], use the index of the array.&#xa; suffix_Y:   suffix to complete the name of the series containing the Y value&#xa; timestamp:   usually the tracker_time variable&#xa;              &#xa; Example:&#xa; &#xa; Assuming we have multiple series in the form:&#xa; &#xa;   /trajectory/node.{X}/position/x&#xa;   /trajectory/node.{X}/position/y&#xa;   &#xa; where {N} is the index of the array (integer). We can create a reactive series from the array with:&#xa; &#xa;   new_series = ScatterXY.new(&quot;my_trajectory&quot;) &#xa;   CreateSeriesFromArray( new_series, &quot;/trajectory/node&quot;, &quot;position/x&quot;, &quot;position/y&quot;, tracker_time );&#xa;--]]&#xa;&#xa;function CreateSeriesFromArray( new_series, prefix, suffix_X, suffix_Y, timestamp )&#xa;  &#xa;  --- clear previous values&#xa;  new_series:clear()&#xa;  &#xa;  --- Append points to new_series&#xa;  index = 0&#xa;  while(true) do&#xa;&#xa;    x = index;&#xa;    -- if not nil, get the X coordinate from a series&#xa;    if suffix_X ~= nil then &#xa;      series_x = TimeseriesView.find( string.format( &quot;%s.%d/%s&quot;, prefix, index, suffix_X) )&#xa;      if series_x == nil then break end&#xa;      x = series_x:atTime(timestamp)&#x9; &#xa;    end&#xa;    &#xa;    series_y = TimeseriesView.find( string.format( &quot;%s.%d/%s&quot;, prefix, index, suffix_Y) )&#xa;    if series_y == nil then break end &#xa;    y = series_y:atTime(timestamp)&#xa;    &#xa;    new_series:push_back(x,y)&#xa;    index = index+1&#xa;  end&#xa;end&#xa;&#xa;--[[ Similar to the built-in function GetSeriesNames(), but select only the names with a give prefix. --]]&#xa;&#xa;function GetSeriesNamesByPrefix(prefix)&#xa;  -- GetSeriesNames(9 is a built-in function&#xa;  all_names = GetSeriesNames()&#xa;  filtered_names = {}&#xa;  for i, name in ipairs(all_names)  do&#xa;    -- check the prefix&#xa;    if name:find(prefix, 1, #prefix) then&#xa;      table.insert(filtered_names, name);&#xa;    end&#xa;  end&#xa;  return filtered_names&#xa;end&#xa;&#xa;--[[ Modify an existing series, applying offsets to all their X and Y values&#xa;&#xa; series: an existing timeseries, obtained with TimeseriesView.find(name)&#xa; delta_x: offset to apply to each x value&#xa; delta_y: offset to apply to each y value &#xa;  &#xa;--]]&#xa;&#xa;function ApplyOffsetInPlace(series, delta_x, delta_y)&#xa;  -- use C++ indeces, not Lua indeces&#xa;  for index=0, series:size()-1 do&#xa;    x,y = series:at(index)&#xa;    series:set(index, x + delta_x, y + delta_y)&#xa;  end&#xa;end&#xa;"/>
+   <scripts/>
+  </plugin>
+  <plugin ID="CSV Exporter"/>
+  <plugin ID="ROS2 Topic Re-Publisher"/>
+ </Plugins>
+ <!-- - - - - - - - - - - - - - - -->
+ <previouslyLoaded_Datafiles>
+  <fileInfo filename="../../logs/20241011_training/awsim_log/rosbag2_2024_10_27-23_30_17/metadata.yaml" prefix="">
+   <plugin ID="DataLoad ROS2 bags">
+    <use_header_stamp value="false"/>
+    <discard_large_arrays value="true"/>
+    <max_array_size value="100"/>
+    <boolean_strings_to_number value="true"/>
+    <remove_suffix_from_strings value="true"/>
+    <selected_topics value="/control/command/actuation_cmd;/control/command/control_cmd;/localization/acceleration;/localization/gyro_twist;/localization/gyro_twist_raw;/localization/imu_gnss_poser/pose_with_covariance;/localization/kinematic_state;/localization/pose;/localization/pose_with_covariance;/localization/twist;/sensing/gnss/pose;/sensing/gnss/pose_with_covariance;/sensing/imu/imu_data;/sensing/imu/imu_raw;/sensing/vehicle_velocity_converter/twist_with_covariance;/vehicle/raw_vehicle_cmd_converter/debug/steer_pid;/vehicle/status/control_mode;/vehicle/status/gear_status;/vehicle/status/steering_status;/vehicle/status/velocity_status;/awsim/gnss/pose_with_covariance;/awsim/imu"/>
+   </plugin>
+  </fileInfo>
+ </previouslyLoaded_Datafiles>
+ <!-- - - - - - - - - - - - - - - -->
+ <customMathEquations/>
+ <snippets/>
+ <!-- - - - - - - - - - - - - - - -->
+</root>
+

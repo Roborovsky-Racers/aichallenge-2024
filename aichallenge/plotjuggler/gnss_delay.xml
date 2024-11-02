@@ -1,48 +1,41 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <root>
  <tabbed_widget name="Main Window" parent="main_window">
-  <Tab tab_name="tab1" containers="1">
+  <Tab containers="1" tab_name="tab1">
    <Container>
-    <DockSplitter orientation="-" count="1" sizes="1">
+    <DockSplitter sizes="1" orientation="-" count="1">
      <DockArea name="...">
       <plot mode="XYPlot" flip_x="false" style="LinesAndDots" flip_y="false">
-       <range right="89706.308047" bottom="43119.283012" top="43189.202498" left="89586.446071"/>
+       <range top="43172.348078" right="89663.678254" bottom="43136.311155" left="89612.196937"/>
        <limitY/>
-       <curve name="/sensing/gnss/pose_with_covariance/pose/pose/position/[x;y]" curve_y="/sensing/gnss/pose_with_covariance/pose/pose/position/y" color="#1f77b4" curve_x="/sensing/gnss/pose_with_covariance/pose/pose/position/x"/>
-       <curve name="/localization/kinematic_state/pose/pose/position/[x;y]" curve_y="/localization/kinematic_state/pose/pose/position/y" color="#9467bd" curve_x="/localization/kinematic_state/pose/pose/position/x"/>
-       <curve name="/awsim/gnss/pose_with_covariance/pose/pose/position/[x;y]" curve_y="/awsim/gnss/pose_with_covariance/pose/pose/position/y" color="#bcbd22" curve_x="/awsim/gnss/pose_with_covariance/pose/pose/position/x"/>
-       <curve name="/localization_test/kinematic_state/pose/pose/position/[x;y]" curve_y="/localization_test/kinematic_state/pose/pose/position/y" color="#f14cc1" curve_x="/localization_test/kinematic_state/pose/pose/position/x"/>
+       <curve name="/sensing/gnss/pose_with_covariance/pose/pose/position/[x;y]" color="#1f77b4" curve_x="/sensing/gnss/pose_with_covariance/pose/pose/position/x" curve_y="/sensing/gnss/pose_with_covariance/pose/pose/position/y"/>
+       <curve name="/localization/kinematic_state/pose/pose/position/[x;y]" color="#9467bd" curve_x="/localization/kinematic_state/pose/pose/position/x" curve_y="/localization/kinematic_state/pose/pose/position/y"/>
+       <curve name="/awsim/gnss/pose_with_covariance/pose/pose/position/[x;y]" color="#bcbd22" curve_x="/awsim/gnss/pose_with_covariance/pose/pose/position/x" curve_y="/awsim/gnss/pose_with_covariance/pose/pose/position/y"/>
       </plot>
      </DockArea>
     </DockSplitter>
    </Container>
   </Tab>
-  <Tab tab_name="tab3" containers="1">
+  <Tab containers="1" tab_name="tab3">
    <Container>
-    <DockSplitter orientation="-" count="2" sizes="0.50055;0.49945">
+    <DockSplitter sizes="1" orientation="-" count="1">
      <DockArea name="...">
-      <plot mode="TimeSeries" flip_x="false" style="Lines" flip_y="false">
-       <range right="596.553753" bottom="-0.001491" top="0.103393" left="87.468079"/>
-       <limitY/>
-       <curve name="/localization/gnss_filter/distance_from_ekf/data" color="#17becf"/>
-       <curve name="/localization/pose_with_covariance/pose/covariance[0]" color="#9467bd"/>
-       <curve name="/localization_test/pose_with_covariance/pose/covariance[0]" color="#17becf"/>
-      </plot>
-     </DockArea>
-     <DockArea name="...">
-      <plot mode="TimeSeries" flip_x="false" style="LinesAndDots" flip_y="false">
-       <range right="596.553753" bottom="89611.111555" top="89681.701195" left="87.468079"/>
+      <plot mode="TimeSeries" flip_x="false" style="Dots" flip_y="false">
+       <range top="89646.630437" right="9.883106" bottom="89638.804947" left="5.456257"/>
        <limitY/>
        <curve name="/localization_test/imu_gnss_poser/pose_with_covariance/pose/pose/position/x" color="#bcbd22"/>
        <curve name="/localization/imu_gnss_poser/pose_with_covariance/pose/pose/position/x" color="#1f77b4"/>
        <curve name="/localization_test/kinematic_state/pose/pose/position/x" color="#d62728"/>
        <curve name="/localization/kinematic_state/pose/pose/position/x" color="#1ac938"/>
+       <curve name="/awsim/gnss/pose_with_covariance/pose/pose/position/x" color="#ff7f0e"/>
+       <curve name="/sensing/gnss/pose_with_covariance/pose/pose/position/x" color="#f14cc1"/>
+       <curve name="/sensing/gnss/pose_with_covariance_filtered/pose/pose/position/x" color="#9467bd"/>
       </plot>
      </DockArea>
     </DockSplitter>
    </Container>
   </Tab>
-  <currentTabIndex index="0"/>
+  <currentTabIndex index="1"/>
  </tabbed_widget>
  <use_relative_time_offset enabled="1"/>
  <!-- - - - - - - - - - - - - - - -->
@@ -67,7 +60,7 @@
    <max_array_size value="100"/>
    <boolean_strings_to_number value="true"/>
    <remove_suffix_from_strings value="true"/>
-   <selected_topics value="/control/command/actuation_cmd;/control/command/control_cmd;/localization/acceleration;/localization/imu_gnss_poser/pose_with_covariance;/localization/kinematic_state;/localization/pose_with_covariance;/localization/twist_estimator/twist_with_covariance;/localization/twist_estimator/twist_with_covariance_raw;/localization_test/imu_gnss_poser/pose_with_covariance;/localization_test/kinematic_state;/localization_test/pose_with_covariance;/localization_test/sensing/gnss/pose_with_covariance_filtered;/sensing/gnss/pose_with_covariance;/tf;/vehicle/status/gear_status;/vehicle/status/steering_status;/vehicle/status/velocity_status;/localization_test/debug/measured_pose"/>
+   <selected_topics value="/awsim/gnss/pose_with_covariance;/localization/acceleration;/localization/imu_gnss_poser/pose_with_covariance;/localization/kinematic_state;/localization/pose_with_covariance;/localization/twist_estimator/twist_with_covariance;/sensing/gnss/pose_with_covariance;/sensing/gnss/pose_with_covariance_filtered;/tf;/vehicle/status/steering_status;/vehicle/status/velocity_status"/>
   </plugin>
   <plugin ID="UDP Server"/>
   <plugin ID="WebSocket Server"/>
