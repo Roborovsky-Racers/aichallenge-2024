@@ -8,7 +8,8 @@
     # gnss_pose_cov_delay_mean: 0.0  # [s]
     # gnss_pose_cov_delay_stddev: 0.0  # [s]
 
-    gnss_pose_cov_delay: 0.30  # [s] 実機の遅延に近そう
+    # gnss_pose_cov_delay: 0.50  # [s]
+    gnss_pose_cov_delay: 0.30  # [s]  0.3~0.4s あたりが実機の遅延に近そう
     gnss_pose_cov_delay_mean: 0.02  # [s]
     gnss_pose_cov_delay_stddev: 0.05  # [s]
 
