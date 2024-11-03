@@ -28,6 +28,10 @@
     # gnss_pose_cov_stddev: 0.015
     gnss_pose_cov_stddev: 0.0015
 
+    gnss_lost_probability: 0.005
+    gnss_lost_time_mean: 2.0
+    gnss_lost_time_stddev: 0.3
+
     imu_acc_mean: 0.0
     imu_acc_stddev: 0.001
     imu_ang_mean: 0.0
