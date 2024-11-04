@@ -25,7 +25,7 @@ rviz-bg:
 
 aw:
 	@echo "Start Autoware in SIM"
-	@ros2 launch aichallenge_system_launch aichallenge_system.launch.xml simulation:=true use_sim_time:=true run_rviz:=false 
+	@ros2 launch aichallenge_system_launch aichallenge_system.launch.xml simulation:=true use_sim_time:=true run_rviz:=false
 
 aw-bg:
 	@echo "Start Autoware in SIM in background"
@@ -85,6 +85,10 @@ record:
 	@echo "Start rosbag recording"
 	@mkdir -p rosbag2_autoware
 	@cd rosbag2_autoware && ros2 bag record -a -x "(/racing_kart/.*|/to_can_bus|/from_can_bus)"
+
+diag:
+	@echo "Start diag"
+	@ros2 launch aic_tools kart_diag.launch.xml
 
 all: sim aw mpc
 	@echo ""
