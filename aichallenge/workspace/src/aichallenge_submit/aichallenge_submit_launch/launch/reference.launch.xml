@@ -8,7 +8,7 @@
   <arg name="vehicle_model" default="racing_kart"  description="vehicle model name"/>
   <arg name="sensor_model" default="racing_kart_sensor_kit" description="sensor model name"/>
 
-  <arg name="use_filtered_gnss" default="false"/>
+  <arg name="use_filtered_gnss" default="true"/>
 
   <!-- Optional parameters -->
   <!-- Map -->
