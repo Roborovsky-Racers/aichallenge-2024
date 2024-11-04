@@ -224,7 +224,7 @@ void SensorConverter::gnss_cov_update_and_publish_loop_() {
       noised_yaw += outlier_gnss_pose_->pose.orientation.z;
       outlier_cov = outlier_gnss_pose_->pose.orientation.w;
       outlier_gnss_pose_ = std::nullopt;
-      RCLCPP_WARN(get_logger(), "Outlier GNSS pose detected! x: %f, y: %f, yaw: %f",
+      RCLCPP_WARN(get_logger(), "Outlier GNSS pose received! x: %f, y: %f, yaw: %f",
                   outlier_gnss_pose_->pose.position.x, outlier_gnss_pose_->pose.position.y, outlier_gnss_pose_->pose.orientation.z);
     }
 
