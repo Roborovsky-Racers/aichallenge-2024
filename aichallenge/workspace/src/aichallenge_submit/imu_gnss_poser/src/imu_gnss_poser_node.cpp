@@ -9,6 +9,8 @@ class ImuGnssPoser : public rclcpp::Node
 public:
     ImuGnssPoser() : Node("imu_gnss_poser")
     {
+        use_static_covariance_ = this->declare_parameter("use_static_covariance", true);
+
         auto qos = rclcpp::QoS(rclcpp::KeepLast(10)).reliable();
         pub_pose_ = this->create_publisher<geometry_msgs::msg::PoseWithCovarianceStamped>("/localization/imu_gnss_poser/pose_with_covariance", qos);
         pub_initial_pose_3d_ = this->create_publisher<geometry_msgs::msg::PoseWithCovarianceStamped>("/localization/initial_pose3d", qos);
@@ -28,7 +30,7 @@ private:
     void gnss_callback(const geometry_msgs::msg::PoseWithCovarianceStamped::SharedPtr msg) {
 
         // Set gnss pose covariance if it is not set
-        if(msg->pose.covariance[7*0] == 0) {
+        if(use_static_covariance_ || msg->pose.covariance[7*0] == 0) {
             msg->pose.covariance[7*0] = 0.1;
             msg->pose.covariance[7*1] = 0.1;
             msg->pose.covariance[7*2] = 0.1;
@@ -75,6 +77,8 @@ private:
     rclcpp::Subscription<sensor_msgs::msg::Imu>::SharedPtr sub_imu_;
     sensor_msgs::msg::Imu imu_msg_;
     bool is_ekf_initialized_ = {false};
+
+    bool use_static_covariance_ = true;
 };
 
 int main(int argc, char *argv[])

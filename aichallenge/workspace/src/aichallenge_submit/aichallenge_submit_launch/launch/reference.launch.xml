@@ -73,11 +73,13 @@
         </node>
 
         <node pkg="imu_gnss_poser" exec="imu_gnss_poser_node" name="imu_gnss_poser" output="screen">
+          <param name="use_static_covariance" value="false"/>
           <remap from="/sensing/gnss/pose_with_covariance" to="/sensing/gnss/pose_with_covariance_filtered"/>
         </node>
     </group>
     <group unless="$(var use_filtered_gnss)">
         <node pkg="imu_gnss_poser" exec="imu_gnss_poser_node" name="imu_gnss_poser" output="screen" />
+        <param name="use_static_covariance" value="true"/>
     </group>
 
     <include file="$(find-pkg-share ekf_localizer)/launch/ekf_localizer.launch.xml">
