@@ -5,4 +5,6 @@
     angular_velocity_offset_z: -0.004  # [rad/s]
     angular_velocity_stddev_xx: 0.03   # [rad/s]
     angular_velocity_stddev_yy: 0.03   # [rad/s]
-    angular_velocity_stddev_zz: 0.03   # [rad/s]
+    # angular_velocity_stddev_zz: 0.03   # [rad/s]
+    angular_velocity_stddev_zz: 0.07   # [rad/s] # 実機に近い値に変更
+
