@@ -13,6 +13,7 @@
   <depend>autoware_auto_control_msgs</depend>
   <depend>autoware_auto_vehicle_msgs</depend>
   <depend>tier4_vehicle_msgs</depend>
+  <depend>tier4_autoware_utils</depend>
   <depend>raw_vehicle_cmd_converter</depend>
   <depend>rclcpp</depend>
   <depend>rclcpp_components</depend>

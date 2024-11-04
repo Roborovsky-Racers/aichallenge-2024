@@ -108,6 +108,7 @@ private:
   Imu::SharedPtr imu_;
   SteeringReport::SharedPtr steering_report_;
   int gnss_pose_delay_;
+  std::atomic<double> base_yaw_;
 
   std::mutex pose_cov_queue_mutex_;
   std::deque<PoseWithCovarianceStamped> pose_cov_queue_;
@@ -146,6 +147,8 @@ private:
 
   double gnss_pose_mean_;
   double gnss_pose_stddev_;
+
+  bool set_fake_gnss_pose_cov_;
   double gnss_pose_cov_mean_;
   double gnss_pose_cov_stddev_;
 

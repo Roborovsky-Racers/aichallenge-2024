@@ -15,6 +15,7 @@
 #include "sensor_converter.hpp"
 #include <chrono>
 #include <geometry_msgs/msg/detail/pose_with_covariance_stamped__struct.hpp>
+#include <tier4_autoware_utils/geometry/geometry.hpp>
 #include <limits>
 #include <thread>
 
@@ -35,7 +36,7 @@
 // }
 
 SensorConverter::SensorConverter(const rclcpp::NodeOptions & node_options)
-: Node("sensor_converter", node_options)
+: Node("sensor_converter", node_options), base_yaw_(0.0)
 {
   using std::placeholders::_1;
 
@@ -55,6 +56,8 @@ SensorConverter::SensorConverter(const rclcpp::NodeOptions & node_options)
   gnss_pose_delay_ = declare_parameter<int>("gnss_pose_delay");
   gnss_pose_mean_ = declare_parameter<double>("gnss_pose_mean");
   gnss_pose_stddev_ = declare_parameter<double>("gnss_pose_stddev");
+
+  set_fake_gnss_pose_cov_ = declare_parameter<bool>("set_fake_gnss_pose_cov");
   gnss_pose_cov_mean_ = declare_parameter<double>("gnss_pose_cov_mean");
   gnss_pose_cov_stddev_ = declare_parameter<double>("gnss_pose_cov_stddev");
 
@@ -205,27 +208,43 @@ void SensorConverter::gnss_cov_update_and_publish_loop_() {
 
   const auto process_gnss_cov = [this](const auto& msg) {
     PoseWithCovarianceStamped noised_pose_cov = msg;
-    // noised_pose_cov.pose.pose.position.x += pose_cov_distribution_(generator_);
-    // noised_pose_cov.pose.pose.position.y += pose_cov_distribution_(generator_);
-    // noised_pose_cov.pose.pose.position.z += pose_cov_distribution_(generator_);
-    noised_pose_cov.pose.pose.position.x += pose_cov_distribution_x_->sample(generator_);
-    noised_pose_cov.pose.pose.position.y += pose_cov_distribution_y_->sample(generator_);
-    // noised_pose_cov.pose.pose.orientation.x = 0.0;
-    // noised_pose_cov.pose.pose.orientation.y = 0.0;
-    // noised_pose_cov.pose.pose.orientation.z = 0.0;
-    // noised_pose_cov.pose.pose.orientation.w = 0.0;
-    noised_pose_cov.pose.pose.orientation.x += pose_distribution_(generator_);
-    noised_pose_cov.pose.pose.orientation.y += pose_distribution_(generator_);
-    noised_pose_cov.pose.pose.orientation.z += pose_distribution_(generator_);
-    noised_pose_cov.pose.pose.orientation.w += pose_distribution_(generator_);
+
+    const double x_noise = pose_cov_distribution_x_->sample(generator_);
+    const double y_noise = pose_cov_distribution_x_->sample(generator_);
+    noised_pose_cov.pose.pose.position.x += x_noise;
+    noised_pose_cov.pose.pose.position.y += y_noise;
+
+    const double yaw_noise = imu_ori_distribution_(generator_);
+    double noised_yaw = base_yaw_ + yaw_noise;
+    double outlier_cov = 0.0;
 
     if(outlier_gnss_pose_.has_value()) {
       noised_pose_cov.pose.pose.position.x += outlier_gnss_pose_->pose.position.x;
       noised_pose_cov.pose.pose.position.y += outlier_gnss_pose_->pose.position.y;
+      noised_yaw += outlier_gnss_pose_->pose.orientation.z;
+      outlier_cov = outlier_gnss_pose_->pose.orientation.w;
       outlier_gnss_pose_ = std::nullopt;
-      // RCLCPP_WARN(get_logger(), "Outlier GNSS pose detected! x: %f, y: %f",
-      //             outlier_gnss_pose_->pose.position.x, outlier_gnss_pose_->pose.position.y);
+      RCLCPP_WARN(get_logger(), "Outlier GNSS pose received! x: %f, y: %f, yaw: %f",
+                  outlier_gnss_pose_->pose.position.x, outlier_gnss_pose_->pose.position.y, outlier_gnss_pose_->pose.orientation.z);
     }
+
+    noised_pose_cov.pose.pose.orientation = tier4_autoware_utils::createQuaternionFromYaw(noised_yaw);
+
+    if(set_fake_gnss_pose_cov_) {
+      const double dist_2 = (x_noise * x_noise) + (y_noise * y_noise); // dist^2 = sqrt(x^2+y^2)^2 = x^2 + y^2 [m^2]
+      const double position_cov = dist_2 * 1000000.0;  // m^2 to mm^2
+      const double position_cov_fake = 140.0 + position_cov / 50.0 + outlier_cov; // 実機っぽい値にするための調整
+      noised_pose_cov.pose.covariance[7*0] = position_cov_fake;  // xx
+      noised_pose_cov.pose.covariance[7*1] = position_cov_fake;  // yy
+    } else {
+      noised_pose_cov.pose.covariance[7*0] = 0.0;           // xx
+      noised_pose_cov.pose.covariance[7*1] = 0.0;           // yy
+    }
+
+    noised_pose_cov.pose.covariance[7*2] = 0.0;           // zz
+    noised_pose_cov.pose.covariance[7*3] = 0.1;           // wxwx
+    noised_pose_cov.pose.covariance[7*4] = 0.1;           // wywy
+    noised_pose_cov.pose.covariance[7*5] = 1.0;           // wzwz
 
     return noised_pose_cov;
   };
@@ -411,7 +430,21 @@ void SensorConverter::on_imu(const Imu::ConstSharedPtr msg)
   imu_ -> linear_acceleration.x += imu_acc_distribution_(generator_);
   imu_ -> linear_acceleration.y += imu_acc_distribution_(generator_);
   imu_ -> linear_acceleration.z += imu_acc_distribution_(generator_);
+
   pub_imu_->publish(*imu_);
+
+  // compute base yaw from imu yaw
+  const double imu_yaw = tier4_autoware_utils::getRPY(msg->orientation).z;
+
+  double base_yaw = imu_yaw - M_PI / 2.0;
+  base_yaw = std::fmod(base_yaw + M_PI, 2.0 * M_PI);
+  if (base_yaw < 0) {
+    base_yaw += M_PI;
+  } else {
+    base_yaw -= M_PI;
+  }
+
+  base_yaw_ = base_yaw;
 }
 
 void SensorConverter::on_steering_report(const SteeringReport::ConstSharedPtr msg)

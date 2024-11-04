@@ -23,6 +23,7 @@
 #    gnss_pose_stddev: 0.005
     gnss_pose_stddev: 0.015
 
+    set_fake_gnss_pose_cov: true
     gnss_pose_cov_mean: 0.02
     # gnss_pose_cov_stddev: 0.007
     # gnss_pose_cov_stddev: 0.015
