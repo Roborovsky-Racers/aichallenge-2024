@@ -177,7 +177,7 @@
           <push-ros-namespace namespace="behavior_planning"/>
 
           <!-- behavior_planning_container -->
-          <node_container pkg="rclcpp_components" exec="component_container" name="behavior_planning_container" namespace="">
+          <node_container pkg="rclcpp_components" exec="component_container" name="behavior_planning_container" namespace="" args="--ros-args --log-level lanelet2_extension:=fatal">
 
             <!-- behavior_path_planner::BehaviorPathPlannerNode -->
             <composable_node pkg="behavior_path_planner" plugin="behavior_path_planner::BehaviorPathPlannerNode" name="behavior_path_planner" namespace="">
