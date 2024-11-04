@@ -57,6 +57,11 @@ SensorConverter::SensorConverter(const rclcpp::NodeOptions & node_options)
   gnss_pose_stddev_ = declare_parameter<double>("gnss_pose_stddev");
   gnss_pose_cov_mean_ = declare_parameter<double>("gnss_pose_cov_mean");
   gnss_pose_cov_stddev_ = declare_parameter<double>("gnss_pose_cov_stddev");
+
+  gnss_lost_probability_ = declare_parameter<double>("gnss_lost_probability");
+  gnss_lost_time_mean_ = declare_parameter<double>("gnss_lost_time_mean");
+  gnss_lost_time_stddev_ = declare_parameter<double>("gnss_lost_time_stddev");
+
   imu_acc_mean_ = declare_parameter<double>("imu_acc_mean");
   imu_acc_stddev_ = declare_parameter<double>("imu_acc_stddev");
   imu_ang_mean_ = declare_parameter<double>("imu_ang_mean");
@@ -118,6 +123,9 @@ SensorConverter::SensorConverter(const rclcpp::NodeOptions & node_options)
     gnss_cov_x_means, gnss_cov_x_std_devs, gnss_cov_x_weights);
   pose_cov_distribution_y_ = std::make_unique<MultimodalDistribution>(
     gnss_cov_y_means, gnss_cov_y_std_devs, gnss_cov_y_weights);
+
+  gnss_lost_dist_ = std::bernoulli_distribution(gnss_lost_probability_);
+  gnss_lost_time_dist_ = std::normal_distribution<double>(gnss_lost_time_mean_, gnss_lost_time_stddev_);
 
   imu_acc_distribution_ = std::normal_distribution<double>(imu_acc_mean_, imu_acc_stddev_);
   imu_ang_distribution_ = std::normal_distribution<double>(imu_ang_mean_, imu_ang_stddev_);
@@ -242,8 +250,19 @@ void SensorConverter::gnss_cov_update_and_publish_loop_() {
 
   while(rclcpp::ok()) {
     // Wait until the next publish period
-#if 1
+#if 0
     rclcpp::WallRate(1.0 / get_next_gnss_pose_cov_publish_period()).sleep();
+#elif 1
+    if (gnss_lost_dist_(generator_)) {
+      const auto lost_time = gnss_lost_time_dist_(generator_);
+      RCLCPP_WARN(get_logger(), "GNSS lost for %f seconds", lost_time);
+      rclcpp::WallRate(1.0 / lost_time).sleep();
+    }
+    else
+    {
+      rclcpp::WallRate(1.0 / get_next_gnss_pose_cov_publish_period()).sleep();
+    }
+
 #else
     {
       const auto loop_start = get_clock()->now();
@@ -286,7 +305,7 @@ void SensorConverter::on_gnss_pose(const PoseStamped::ConstSharedPtr msg)
 {
   auto process_and_publish_gnss = [this, msg]() {
     rclcpp::sleep_for(std::chrono::milliseconds(gnss_pose_delay_));
-    
+
     auto pose = std::make_shared<PoseStamped>(*msg);
     pose->header.stamp = now();
     pose->pose.position.x += pose_distribution_(generator_);
@@ -360,7 +379,7 @@ void SensorConverter::on_gnss_pose_cov(const PoseWithCovarianceStamped::ConstSha
 #else
     auto process_and_publish_gnss_cov = [this, msg]() {
     rclcpp::sleep_for(std::chrono::milliseconds(gnss_pose_delay_));
-    
+
     auto pose_cov = std::make_shared<PoseWithCovarianceStamped>(*msg);
     pose_cov->header.stamp = now();
     pose_cov->pose.pose.position.x += pose_cov_distribution_(generator_);

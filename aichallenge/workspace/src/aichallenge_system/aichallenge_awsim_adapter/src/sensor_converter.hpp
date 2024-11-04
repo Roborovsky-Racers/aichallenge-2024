@@ -37,7 +37,7 @@ public:
 
     MultimodalDistribution(const std::vector<double>& means, const std::vector<double>& stddevs, const std::vector<double>& weights)
         : mix_dist_(0.0, 1.0), cumulative_weights_(weights.size()) {
-        
+
         // Ensure the means, stddevs, and weights vectors are the same size
         if (means.size() != stddevs.size() || means.size() != weights.size()) {
             throw std::invalid_argument("Vectors of means, stddevs, and weights must be the same size.");
@@ -122,6 +122,12 @@ private:
   std::normal_distribution<double> imu_ang_distribution_;
   std::normal_distribution<double> imu_ori_distribution_;
   std::normal_distribution<double> steering_angle_distribution_;
+
+  double gnss_lost_probability_;
+  std::bernoulli_distribution gnss_lost_dist_;
+  double gnss_lost_time_mean_;
+  double gnss_lost_time_stddev_;
+  std::normal_distribution<double> gnss_lost_time_dist_;
 
   double gnss_pose_cov_publish_period_;
   double gnss_pose_cov_publish_period_mean_;
