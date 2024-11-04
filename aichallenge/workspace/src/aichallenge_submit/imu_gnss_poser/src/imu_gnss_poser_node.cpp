@@ -27,10 +27,14 @@ private:
 
     void gnss_callback(const geometry_msgs::msg::PoseWithCovarianceStamped::SharedPtr msg) {
 
+        // Set gnss pose covariance if it is not set
+        if(msg->pose.covariance[7*0] == 0) {
+            msg->pose.covariance[7*0] = 0.1;
+            msg->pose.covariance[7*1] = 0.1;
+            msg->pose.covariance[7*2] = 0.1;
+        } 
+
         // this covariance means orientation is not reliable
-        msg->pose.covariance[7*0] = 0.1;
-        msg->pose.covariance[7*1] = 0.1;
-        msg->pose.covariance[7*2] = 0.1;
         msg->pose.covariance[7*3] = 100000.0;
         msg->pose.covariance[7*4] = 100000.0;
         msg->pose.covariance[7*5] = 100000.0;
