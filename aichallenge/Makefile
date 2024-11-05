@@ -2,6 +2,7 @@
 RVIZ_CONFIG="/aichallenge/workspace/src/aichallenge_system/aichallenge_system_launch/config/debug_sensing.rviz.custom"
 RVIZ_IMAGE="/aichallenge/workspace/src/aichallenge_system/aichallenge_system_launch/rviz/image/autoware.png"
 MAP_YAML_FILE="/aichallenge/workspace/src/aichallenge_submit/multi_purpose_mpc_ros/multi_purpose_mpc_ros/env/official/occupancy_grid_map.yaml"
+PLOTJUGGLER_LAYOUT="/aichallenge/plotjuggler/final_run.xml"
 
 sim:
 	@sudo ip link set multicast on lo
@@ -64,9 +65,9 @@ reset:
 kill:
 	@echo "Kill all"
 	@bash -i -c "rkill"
+
 kill-mpc:
 	@sh kill_mpc.sh
-
 
 setup: sim-bg rviz-bg aw-bg
 	@echo ""
@@ -89,6 +90,10 @@ record:
 diag:
 	@echo "Start diag"
 	@ros2 launch aic_tools kart_diag.launch.xml
+
+juggler:
+	@echo "Start plotjuggler"
+	@ros2 run plotjuggler plotjuggler -l ${PLOTJUGGLER_LAYOUT}
 
 all: sim aw mpc
 	@echo ""
