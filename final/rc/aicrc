@@ -1,0 +1,14 @@
+AIC_DIR="/home/$USER/aichallenge-2024"
+
+function da() {
+  CONTAINER_NAME=`docker ps --filter "name=aichallenge-" --format "{{.Names}}"`
+  if ! grep -Fxq "source rosrc" ~/.bashrc; then
+    echo "source rosrc" >> ~/.bashrc
+  fi
+
+  docker exec -it $CONTAINER_NAME /bin/bash -c 'if ! grep -Fxq "source /aichallenge/rosrc" ~/.bashrc; then echo "source /aichallenge/rosrc" >> ~/.bashrc; fi'
+  docker exec -it $CONTAINER_NAME /bin/bash
+}
+
+PS1='\[\033[01;34m\][VEHICLE]\[\033[01;30m\]${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+echo -e "\e[34maicrc is successfully loaded!\e[0m"
