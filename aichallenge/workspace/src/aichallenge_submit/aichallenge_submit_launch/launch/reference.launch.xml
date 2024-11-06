@@ -5,7 +5,7 @@
   <arg name="simulation" description="used for sensor kit param"/>
   <arg name="use_sim_time"/>
   <arg name="map_path" default="$(find-pkg-share aichallenge_submit_launch)/map"/>
-  <arg name="vehicle_model" default="racing_kart" description="vehicle model name"/>
+  <arg name="vehicle_model" default="racing_kart"  description="vehicle model name"/>
   <arg name="sensor_model" default="racing_kart_sensor_kit" description="sensor model name"/>
 
   <arg name="use_filtered_gnss" default="true"/>
@@ -55,8 +55,8 @@
     </group>
   </group>
 
-  <!-- Localization -->
-  <let name="pose_additional_delay_var" value="0.45" />
+    <!-- Localization -->
+  <let name="pose_additional_delay_var" value="0.4" />
   <group>
     <push-ros-namespace namespace="localization"/>
     <include file="$(find-pkg-share gyro_odometer)/launch/gyro_odometer.launch.xml">
@@ -67,19 +67,19 @@
     </include>
 
     <group if="$(var use_filtered_gnss)">
-      <node pkg="aic_tools" exec="gnss_filter" name="gnss_filter" output="both">
-        <param from="$(find-pkg-share aic_tools)/config/gnss_filter.param.yaml"/>
-      </node>
+        <node pkg="aic_tools" exec="gnss_filter" name="gnss_filter" output="both">
+          <param from="$(find-pkg-share aic_tools)/config/gnss_filter.param.yaml"/>
+        </node>
 
-      <node pkg="imu_gnss_poser" exec="imu_gnss_poser_node" name="imu_gnss_poser" output="screen">
-        <remap from="/sensing/gnss/pose_with_covariance" to="/sensing/gnss/pose_with_covariance_filtered"/>
-        <param name="use_static_covariance" value="false"/>
-      </node>
+        <node pkg="imu_gnss_poser" exec="imu_gnss_poser_node" name="imu_gnss_poser" output="screen">
+          <remap from="/sensing/gnss/pose_with_covariance" to="/sensing/gnss/pose_with_covariance_filtered"/>
+          <param name="use_static_covariance" value="false"/>
+        </node>
     </group>
     <group unless="$(var use_filtered_gnss)">
-      <node pkg="imu_gnss_poser" exec="imu_gnss_poser_node" name="imu_gnss_poser" output="screen">
-        <param name="use_static_covariance" value="true"/>
-      </node>
+        <node pkg="imu_gnss_poser" exec="imu_gnss_poser_node" name="imu_gnss_poser" output="screen">
+          <param name="use_static_covariance" value="true"/>
+        </node>
     </group>
 
     <include file="$(find-pkg-share ekf_localizer)/launch/ekf_localizer.launch.xml">
@@ -144,7 +144,7 @@
         <remap from="output/goal_pose" to="/planning/mission_planning/echo_back_goal_pose"/>
       </node>
 
-    </group>    <!-- mission_planning -->
+    </group> <!-- mission_planning -->
 
     <!-- scenario_planning -->
     <group>
@@ -154,7 +154,7 @@
       <group>
         <arg name="cmd" default="ros2 topic pub /planning/scenario_planning/scenario tier4_planning_msgs/msg/Scenario '{current_scenario: LaneDriving, activating_scenarios: [LaneDriving]}'"/>
         <executable cmd="$(var cmd)" name="scenario_pub" shell="true"/>
-      </group>      <!-- scenario_selector -->
+      </group> <!-- scenario_selector -->
 
       <!-- operation_mode -->
       <group>
@@ -168,7 +168,7 @@
           is_remote_mode_available: true
           }'"/>
         <executable cmd="$(var cmd)" name="operation_mode_pub" shell="true"/>
-      </group>      <!-- operation_mode -->
+      </group> <!-- operation_mode -->
 
       <!-- lane_driving -->
       <group>
@@ -185,8 +185,7 @@
             <composable_node pkg="behavior_path_planner" plugin="behavior_path_planner::BehaviorPathPlannerNode" name="behavior_path_planner" namespace="">
               <remap from="~/input/route" to="/planning/mission_planning/route" />
               <remap from="~/input/vector_map" to="/map/vector_map" />
-              <remap from="~/input/perception" to="/perception/object_recognition/objects" />
-              <!-- autoware_auto_perception_msgs/PredictedObjects -->
+              <remap from="~/input/perception" to="/perception/object_recognition/objects" /> <!-- autoware_auto_perception_msgs/PredictedObjects -->
               <remap from="~/input/occupancy_grid_map" to="/perception/occupancy_grid_map/map" />
               <remap from="~/input/costmap" to="/planning/scenario_planning/parking/costmap_generator/occupancy_grid" />
               <remap from="~/input/odometry" to="/localization/kinematic_state" />
@@ -213,8 +212,8 @@
             </composable_node>
 
           </node_container>
-        </group>        <!-- behavior_planning -->
-      </group>      <!-- lane_driving -->
+        </group> <!-- behavior_planning -->
+      </group> <!-- lane_driving -->
 
       <!-- Customizable -->
       <node pkg="path_to_trajectory" exec="path_to_trajectory_node" name="path_to_trajectory" output="screen">
@@ -275,7 +274,7 @@
 
     </node_container>
 
-  </group>  <!-- map -->
+  </group> <!-- map -->
 
   <!-- vehicle -->
   <group if="$(var launch_vehicle_interface)">
