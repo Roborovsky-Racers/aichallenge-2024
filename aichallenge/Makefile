@@ -4,6 +4,10 @@ RVIZ_IMAGE="/aichallenge/workspace/src/aichallenge_system/aichallenge_system_lau
 MAP_YAML_FILE="/aichallenge/workspace/src/aichallenge_submit/multi_purpose_mpc_ros/multi_purpose_mpc_ros/env/official/occupancy_grid_map.yaml"
 PLOTJUGGLER_LAYOUT="/aichallenge/plotjuggler/final_run.xml"
 
+init:
+	@sudo ip link set multicast on lo
+	@sudo sysctl -w net.core.rmem_max=2147483647 >/dev/null
+
 sim:
 	@sudo ip link set multicast on lo
 	@sudo sysctl -w net.core.rmem_max=2147483647 >/dev/null
@@ -15,6 +19,11 @@ sim-bg:
 	@sudo sysctl -w net.core.rmem_max=2147483647 >/dev/null
 	@echo "Start AWSIM"
 	@${AWSIM_PATH}/AWSIM.x86_64 --timeout 86400.0 &
+
+sim-cpu:
+	/aichallenge/simulator/AWSIM_CPU/AWSIM.x86_64 --timeout 86400.0
+sim-gpu:
+	/aichallenge/simulator/AWSIM_GPU/AWSIM.x86_64 --timeout 86400.0
 
 rviz:
 	@echo "Start Rviz and visualization"
