@@ -25,11 +25,13 @@
 #include <geometry_msgs/msg/pose_stamped.hpp>
 #include <geometry_msgs/msg/pose_with_covariance_stamped.hpp>
 #include "autoware_auto_vehicle_msgs/msg/steering_report.hpp"
+#include <autoware_auto_vehicle_msgs/msg/velocity_report.hpp>
 
 using geometry_msgs::msg::PoseStamped;
 using geometry_msgs::msg::PoseWithCovarianceStamped;
 using sensor_msgs::msg::Imu;
 using autoware_auto_vehicle_msgs::msg::SteeringReport;
+using autoware_auto_vehicle_msgs::msg::VelocityReport;
 
 class MultimodalDistribution {
 public:
@@ -89,24 +91,27 @@ private:
   rclcpp::Subscription<PoseWithCovarianceStamped>::SharedPtr sub_gnss_pose_cov_;
   rclcpp::Subscription<Imu>::SharedPtr sub_imu_;
   rclcpp::Subscription<SteeringReport>::SharedPtr sub_steering_report_;
+  rclcpp::Subscription<VelocityReport>::SharedPtr sub_velocity_report_;
   rclcpp::Publisher<PoseStamped>::SharedPtr pub_gnss_pose_;
   rclcpp::Publisher<Imu>::SharedPtr pub_imu_;
   rclcpp::Publisher<PoseWithCovarianceStamped>::SharedPtr pub_gnss_pose_cov_;
   rclcpp::Publisher<SteeringReport>::SharedPtr pub_steering_report_;
-
+  rclcpp::Publisher<VelocityReport>::SharedPtr pub_velocity_report_;
 
   void gnss_cov_update_and_publish_loop_();
   void on_outlier_gnss_pose(const PoseStamped::ConstSharedPtr msg);
   void on_gnss_pose(const PoseStamped::ConstSharedPtr msg);
-  void on_gnss_pose_cov(const PoseWithCovarianceStamped::ConstSharedPtr msg);
+  void on_gnss_pose_cov(const PoseWithCovarianceStamped::SharedPtr msg);
   void on_imu(const Imu::ConstSharedPtr msg);
   void on_steering_report(const SteeringReport::ConstSharedPtr msg);
+  void on_velocity_report(const VelocityReport::ConstSharedPtr msg);
 
   std::optional<PoseStamped> outlier_gnss_pose_;
   PoseStamped::SharedPtr pose_;
   PoseWithCovarianceStamped::SharedPtr pose_cov_;
   Imu::SharedPtr imu_;
   SteeringReport::SharedPtr steering_report_;
+  VelocityReport::SharedPtr velocity_report_;
   int gnss_pose_delay_;
   std::atomic<double> base_yaw_;
 
@@ -161,6 +166,8 @@ private:
   double steering_angle_mean_;
   double steering_angle_stddev_;
   double steering_tire_angle_gain_var_;
+
+  bool use_sim_time_;
 };
 
-#endif  // AUTOWARE_EXTERNAL_CMD_CONVERTER__NODE_HPP_
+#endif // AUTOWARE_EXTERNAL_CMD_CONVERTER__NODE_HPP_
