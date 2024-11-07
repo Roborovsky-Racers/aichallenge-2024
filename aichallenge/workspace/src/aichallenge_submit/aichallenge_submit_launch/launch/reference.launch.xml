@@ -56,7 +56,7 @@
   </group>
 
     <!-- Localization -->
-  <let name="pose_additional_delay_var" value="0.4" />
+  <let name="pose_additional_delay_var" value="0.45" />
   <group>
     <push-ros-namespace namespace="localization"/>
     <include file="$(find-pkg-share gyro_odometer)/launch/gyro_odometer.launch.xml">
@@ -225,8 +225,8 @@
   </group>
 
   <!-- Pure Pursuit -->
-  <let name="steering_tire_angle_gain_var" value="1.0" if="$(var simulation)"/>
-  <let name="steering_tire_angle_gain_var" value="1.639" unless="$(var simulation)"/>
+  <!-- <let name="steering_tire_angle_gain_var" value="1.0" if="$(var simulation)"/>
+  <let name="steering_tire_angle_gain_var" value="1.639" unless="$(var simulation)"/> -->
 
   <!-- <node pkg="simple_pure_pursuit" exec="simple_pure_pursuit" name="simple_pure_pursuit_node" output="screen">
     <param name="use_external_target_vel" value="true"/>

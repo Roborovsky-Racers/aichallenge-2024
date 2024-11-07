@@ -41,6 +41,8 @@ SensorConverter::SensorConverter(const rclcpp::NodeOptions & node_options)
   using std::placeholders::_1;
 
   // Parameters
+  use_sim_time_ = this->get_parameter_or("use_sim_time", false);
+
   gnss_pose_cov_value_uptate_period_ = declare_parameter<double>("gnss_pose_cov_value_uptate_period");
   gnss_pose_cov_value_uptate_period_mean_ = declare_parameter<double>("gnss_pose_cov_value_uptate_period_mean");
   gnss_pose_cov_value_uptate_period_stddev_ = declare_parameter<double>("gnss_pose_cov_value_uptate_period_stddev");
@@ -87,12 +89,15 @@ SensorConverter::SensorConverter(const rclcpp::NodeOptions & node_options)
     "/awsim/imu", 1, std::bind(&SensorConverter::on_imu, this, _1));
   sub_steering_report_ = create_subscription<SteeringReport>(
     "/awsim/steering_status", 1, std::bind(&SensorConverter::on_steering_report, this, _1));
+  sub_velocity_report_ = create_subscription<VelocityReport>(
+    "/awsim/velocity_status", 1, std::bind(&SensorConverter::on_velocity_report, this, _1));
 
   // Publishers
   pub_gnss_pose_ = create_publisher<PoseStamped>("/sensing/gnss/pose", 1);
   pub_gnss_pose_cov_ = create_publisher<PoseWithCovarianceStamped>("/sensing/gnss/pose_with_covariance", 1);
   pub_imu_ = create_publisher<Imu>("/sensing/imu/imu_raw", 1);
   pub_steering_report_ = create_publisher<SteeringReport>("/vehicle/status/steering_status", 1);
+  pub_velocity_report_ = create_publisher<VelocityReport>("/vehicle/status/velocity_status", 1);
 
   std::random_device rd;
   generator_ = std::mt19937(rd());
@@ -342,9 +347,15 @@ void SensorConverter::on_gnss_pose(const PoseStamped::ConstSharedPtr msg)
   processing_thread.detach();
 }
 
-void SensorConverter::on_gnss_pose_cov(const PoseWithCovarianceStamped::ConstSharedPtr msg)
+void SensorConverter::on_gnss_pose_cov(const PoseWithCovarianceStamped::SharedPtr msg)
 {
 #if 1
+  if(!use_sim_time_) {
+    // use_sim_time:=falseの場合でも msg には AWSIM の stamp が入ってしまうので、
+    // now() で上書きする
+    msg->header.stamp = now();
+  }
+
   std::lock_guard<std::mutex> lock(pose_cov_queue_mutex_);
   pose_cov_queue_.push_back(*msg);
 #elif 0
@@ -431,6 +442,12 @@ void SensorConverter::on_imu(const Imu::ConstSharedPtr msg)
   imu_ -> linear_acceleration.y += imu_acc_distribution_(generator_);
   imu_ -> linear_acceleration.z += imu_acc_distribution_(generator_);
 
+  if(!use_sim_time_) {
+    // use_sim_time:=falseの場合でも msg には AWSIM の stamp が入ってしまうので、
+    // now() で上書きする
+    imu_->header.stamp = now();
+  }
+
   pub_imu_->publish(*imu_);
 
   // compute base yaw from imu yaw
@@ -455,7 +472,27 @@ void SensorConverter::on_steering_report(const SteeringReport::ConstSharedPtr ms
   steering_report_->steering_tire_angle *= steering_tire_angle_gain_var_;
 
   steering_report_->steering_tire_angle += steering_angle_distribution_(generator_);
+
+  if(!use_sim_time_) {
+    // use_sim_time:=falseの場合でも msg には AWSIM の stamp が入ってしまうので、
+    // now() で上書きする
+    steering_report_->stamp = now();
+  }
+
   pub_steering_report_->publish(*steering_report_);
+}
+
+void SensorConverter::on_velocity_report(const VelocityReport::ConstSharedPtr msg)
+{
+  velocity_report_ = std::make_shared<VelocityReport>(*msg);
+
+  if(!use_sim_time_) {
+    // use_sim_time:=falseの場合でも msg には AWSIM の stamp が入ってしまうので、
+    // now() で上書きする
+    velocity_report_->header.stamp = now();
+  }
+
+  pub_velocity_report_->publish(*velocity_report_);
 }
 
 #include <rclcpp_components/register_node_macro.hpp>

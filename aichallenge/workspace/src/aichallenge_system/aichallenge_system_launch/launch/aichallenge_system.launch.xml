@@ -35,7 +35,9 @@
 
     <!-- Adapters for simulation. -->
     <group if="$(var simulation)">
-        <include file="$(find-pkg-share aichallenge_system_launch)/launch/mode/awsim.launch.xml"/>
+        <include file="$(find-pkg-share aichallenge_system_launch)/launch/mode/awsim.launch.xml">
+          <arg name="use_sim_time" value="$(var use_sim_time)"/>
+        </include>
     </group>
 
     <!-- Adapters for real vehicle. -->

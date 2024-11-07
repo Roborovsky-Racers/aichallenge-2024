@@ -37,6 +37,10 @@ aw:
 	@echo "Start Autoware in SIM"
 	@ros2 launch aichallenge_system_launch aichallenge_system.launch.xml simulation:=true use_sim_time:=true run_rviz:=false
 
+aw-no-sim-time:
+	@echo "Start Autoware in SIM (use_sim_time:=false)"
+	@ros2 launch aichallenge_system_launch aichallenge_system.launch.xml simulation:=true use_sim_time:=false run_rviz:=false
+
 aw-bg:
 	@echo "Start Autoware in SIM in background"
 	@ros2 launch aichallenge_system_launch aichallenge_system.launch.xml simulation:=true use_sim_time:=true run_rviz:=false  &
