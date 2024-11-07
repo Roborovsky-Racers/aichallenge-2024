@@ -8,7 +8,7 @@ AIC_LOCAL_DIR="/home/$USER/aic/aichallenge-2024"
 AIC_REMOTE_DIR="/home/$AIC_USER/aichallenge-2024"
 
 # backup original aichallenge-2024 on remote
-ssh -t "$AIC_HOSTNAME" "bash -c 'cd $AIC_REMOTE_DIR/aichallenge/; if [ ! -d backup/original ]; then tar zcvf aichallenge-2024.original.tar.gz -C /home/$AIC_USER/ aichallenge-2024; mkdir -p backup/original; mv aichallenge-2024.original.tar.gz backup/original/; else echo \"original backup already exist\"; fi'" || true
+ssh -t "$AIC_HOSTNAME" "bash -c 'cd $AIC_REMOTE_DIR/aichallenge/; if [ ! -d backup/original ]; then tar zcvf aichallenge-2024.tar.gz -C /home/$AIC_USER/ aichallenge-2024; mkdir -p backup/original; mv aichallenge-2024.tar.gz backup/original/; else echo \"original backup already exist\"; fi'" || true
 
 # transfer config files
 cd $AIC_LOCAL_DIR
