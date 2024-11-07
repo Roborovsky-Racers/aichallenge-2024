@@ -48,6 +48,7 @@ aw-bg:
 vehicle:
 	@echo "Start Autoware in REAL"
 	@sudo ip link set multicast on lo
+	@sudo sysctl -w net.core.rmem_max=2147483647 >/dev/null
 	@ros2 launch aichallenge_system_launch aichallenge_system.launch.xml simulation:=false use_sim_time:=false run_rviz:=false rviz_config:=$(RVIZ_CONFIG)
 
 mpc: start
