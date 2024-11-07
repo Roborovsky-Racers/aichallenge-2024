@@ -2,11 +2,8 @@ AIC_DIR="/home/$USER/aichallenge-2024"
 
 function da() {
   CONTAINER_NAME=`docker ps --filter "name=aichallenge-" --format "{{.Names}}"`
-  if ! grep -Fxq "source rosrc" ~/.bashrc; then
-    echo "source rosrc" >> ~/.bashrc
-  fi
-
-  docker exec -it $CONTAINER_NAME /bin/bash -c 'if ! grep -Fxq "source /aichallenge/rosrc" ~/.bashrc; then echo "source /aichallenge/rosrc" >> ~/.bashrc; fi'
+  SOURCE_CMD="source /aichallenge/final/rc/rosrc"
+  docker exec -it $CONTAINER_NAME /bin/bash -c "if ! grep -Fxq \"$SOURCE_CMD\" ~/.bashrc; then echo \"$SOURCE_CMD\" >> ~/.bashrc; fi"
   docker exec -it $CONTAINER_NAME /bin/bash
 }
 
