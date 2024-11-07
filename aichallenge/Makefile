@@ -80,7 +80,7 @@ kill:
 	@bash -i -c "rkill"
 
 kill-mpc:
-	@sh kill_mpc.sh
+	@sh final/kill_mpc.sh
 
 setup: sim-bg rviz-bg aw-bg
 	@echo ""
