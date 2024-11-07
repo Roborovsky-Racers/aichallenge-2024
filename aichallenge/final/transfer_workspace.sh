@@ -24,8 +24,6 @@ scp -r src.tar.gz $AIC_HOSTNAME:$AIC_REMOTE_DIR/aichallenge/workspace/
 ssh -t "$AIC_HOSTNAME" "bash -c 'cd $AIC_REMOTE_DIR/aichallenge/workspace/; tar zxvf src.tar.gz && rm src.tar.gz'"
 rm src.tar.gz
 
-
 # add source of aicrc to remote bashrc
 SOURCE_CMD="source ~/aichallenge-2024/aichallenge/final/rc/aicrc"
 ssh -t "$AIC_HOSTNAME" "bash -c 'if ! grep -Fxq \"$SOURCE_CMD\" ~/.bashrc; then echo \"$SOURCE_CMD\" >> ~/.bashrc; fi'"
-
