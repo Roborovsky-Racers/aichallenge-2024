@@ -1,7 +1,5 @@
 #!/bin/bash
 
-IP_ADDR="192.168.1.68"
-
 sudo ip link set multicast on lo
 sudo sysctl -w net.core.rmem_max=2147483647 >/dev/null
 
@@ -13,4 +11,4 @@ docker run --rm \
     -e CYCLONEDDS_URI=file:///vehicle/cyclonedds.xml \
     -v "${SCRIPT_DIR}/../vehicle:/vehicle" \
     --name zenoh \
-    eclipse/zenoh-bridge-ros2dds:latest -e "tcp/${IP_ADDR}:7447"
+    eclipse/zenoh-bridge-ros2dds:latest -e "tcp/${AIC_IP_ADDR}:7447"

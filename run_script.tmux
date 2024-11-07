@@ -45,6 +45,7 @@ send-keys "echo $SOURCE_CMD" C-m
 send-keys "echo run_autoware.bash vehicle" C-m
 send-keys "$AIC_DOCKER_RUN_CMD" C-m
 
+## 下記を実行すると、aichallengeのコンテナが複数別名で起動してしまい、attachが面倒になるため無効化している
 # pane 1 is used for aic rosbag record
 # select-pane -t 1
 # send-keys "set -x" C-m
