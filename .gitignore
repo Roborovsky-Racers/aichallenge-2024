@@ -3,3 +3,4 @@ result-details.json
 rosbag2*
 .vscode/
 .cache/
+backup/
