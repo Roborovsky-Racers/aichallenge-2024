@@ -168,6 +168,19 @@ function vmid() {
   qn2 10000.0
 }
 
+## --------- 中高速 -------------- ##
+## Lap1: 59s, Lap2: 54s
+function vmidfast() {
+  vmax 25.0
+  aymax 7.0
+  q0 1000000.0
+  q1 100000000.0
+  q2 850000.0
+  qn0 1000000.0
+  qn1 1000.0
+  qn2 10000.0
+}
+
 ## --- 高速 (gnss delay 0.4) --- ##
 ## Lap1: 55s, Lap2: 49s
 function vfast1() {
