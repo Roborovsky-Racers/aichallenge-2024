@@ -76,6 +76,10 @@ reset:
 	@ros2 topic pub --once /aichallenge/awsim/reset std_msgs/msg/Empty {} >/dev/null &
 	@ros2 run multi_purpose_mpc_ros publish_initialpose
 
+init-gnss:
+	@echo "Publish GNSS initialpose"
+	@ros2 run multi_purpose_mpc_ros publish_initialpose_gnss
+
 kill:
 	@echo "Kill all"
 	@bash -i -c "rkill"
